@@ -12,6 +12,6 @@ public interface JpaSubjectRepository extends JpaRepository<Subject,Long> {
 
     Optional<Subject> findById(Long id);
 
-    Subject findByNameAndSemesterNo(String name, Long semesterNo);
+    Subject findByName(String name);
 
 }

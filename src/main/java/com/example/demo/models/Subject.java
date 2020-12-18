@@ -15,7 +15,6 @@ public class Subject {
     @Nationalized
     @Column(columnDefinition = "NVARCHAR(255)")
     private String name;
-    private Long semesterNo;  //vo koj semestar po pravilo treba da se slusa predmetot (1,2,3,....)
 
     public Long getId() {
         return id;
@@ -29,12 +28,5 @@ public class Subject {
         this.name = name;
     }
 
-    public Long getSemesterNo() {
-        return semesterNo;
-    }
-
-    public void setSemesterNo(Long semesterNo) {
-        this.semesterNo = semesterNo;
-    }
 }
 

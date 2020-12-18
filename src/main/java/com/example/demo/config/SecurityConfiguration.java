@@ -36,14 +36,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    //TODO fix routes that should be private
+    //TODO fix routes that should be private and fix upload timetable route
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers("/timetable/professors","/timetable/rooms","/timetable/filter/*").permitAll()
                 .antMatchers("/timetable/student/*").hasRole("STUDENT")
-                .antMatchers("/timetable/upload-timetable").hasRole("STAFF")
+                //.antMatchers("/timetable/upload-timetable").hasRole("STAFF")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new LoginFilter("/login", authenticationManager()),

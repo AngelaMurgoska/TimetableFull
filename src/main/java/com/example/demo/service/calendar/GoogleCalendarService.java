@@ -88,6 +88,11 @@ public class GoogleCalendarService {
     }
 
     public void addStudentTimetableToGoogleCalendar(List<StudentTimetable> studentTimetables) throws GeneralSecurityException, IOException {
+        //TODO handle it in a better way on frontend
+        if (studentTimetables == null) {
+            return;
+        }
+
         Calendar service = setupCalendarService();
 
         Long studentIndex = studentTimetables.get(0).getStudentindex();

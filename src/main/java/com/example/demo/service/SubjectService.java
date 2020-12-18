@@ -11,5 +11,5 @@ public interface SubjectService {
 
     Optional<Subject> getById(Long id);
 
-    Subject getByNameAndSemesterNo(String name, Long semesterNo);
+    Subject getByName(String name);
 }

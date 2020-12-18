@@ -17,6 +17,8 @@ public interface TimetableService {
 
     List<String> getAllRooms();
 
+    List<String> getAllStudentGroups();
+
     Optional<Long> getLatestTimetableVersionInSemester(Long semId);
 
     Timetable getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId,Long subjId,Long semId,String studentgroup,Long version);

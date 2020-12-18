@@ -12,13 +12,9 @@ public class StudentSubjects {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long studentgroup;
-
     @Nationalized
     @Column(columnDefinition = "NVARCHAR(255)")
     private String studentGroupTimetable;
-
-    private Long semesterNo; //vo koj semestar studentot go slusal predmetot (1,2,3,....)
 
     @ManyToOne
     @JoinColumn(name = "student_id", updatable = false)
@@ -40,28 +36,12 @@ public class StudentSubjects {
         return id;
     }
 
-    public Long getStudentgroup() {
-        return studentgroup;
-    }
-
-    public void setStudentgroup(Long studentgroup) {
-        this.studentgroup = studentgroup;
-    }
-
     public String getStudentGroupTimetable() {
         return studentGroupTimetable;
     }
 
     public void setStudentGroupTimetable(String studentGroupTimetable) {
         this.studentGroupTimetable = studentGroupTimetable;
-    }
-
-    public Long getSemesterNo() {
-        return semesterNo;
-    }
-
-    public void setSemesterNo(Long semesterNo) {
-        this.semesterNo = semesterNo;
     }
 
     public Student getStudent() {

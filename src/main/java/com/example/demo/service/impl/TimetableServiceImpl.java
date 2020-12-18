@@ -35,6 +35,11 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
+    public List<String> getAllStudentGroups() {
+        return repo.getAllStudentGroups();
+    }
+
+    @Override
     public Optional<Long> getLatestTimetableVersionInSemester(Long semId) {
         return repo.findLatestTimetableVersionInSemester(semId);
     }

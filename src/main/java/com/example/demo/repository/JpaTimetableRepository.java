@@ -17,6 +17,9 @@ public interface JpaTimetableRepository extends JpaRepository<Timetable,Long> {
     @Query("SELECT DISTINCT(t.room) FROM Timetable t")
     List<String> getAllRooms();
 
+    @Query("SELECT DISTINCT(t.studentgroup) FROM Timetable t")
+    List<String> getAllStudentGroups();
+
     @Query("SELECT MAX(t.version) FROM Timetable t WHERE t.semester.id=:semester_id")
     Optional<Long> findLatestTimetableVersionInSemester(@Param("semester_id") Long semId);
 

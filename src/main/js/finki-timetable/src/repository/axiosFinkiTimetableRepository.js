@@ -2,6 +2,17 @@ import axios,{ post } from 'axios';
 
 const FinkiTimetableService = {
 
+    createStudentTimetable:(index, studentTimetable) => {
+        const jwtToken = sessionStorage.getItem("jwt");
+        const url = `http://localhost:8080/timetable/create-timetable/${index}`;
+        const config = {
+            headers: {
+                "Authorization": jwtToken
+            },
+        }
+        return axios.post(url, studentTimetable, config);
+    },
+
     addTimetableToGoogleCalendar:(index) => {
         const jwtToken = sessionStorage.getItem("jwt");
         const url = `http://localhost:8080/timetable/add-to-calendar/${index}`;
@@ -28,7 +39,7 @@ const FinkiTimetableService = {
                 ...(academicYear ? { academicYear: academicYear } : {}),
             }
         }
-        return  post(url, formData,config)
+        return axios.post(url, formData,config)
     },
 
     fetchAllProfessors: ()=>{
@@ -36,9 +47,21 @@ const FinkiTimetableService = {
       return axios.get(url,);
     },
 
+    fetchAllSubjects: () => {
+        const jwtToken = sessionStorage.getItem("jwt");
+        const url = 'http://localhost:8080/timetable/subjects'
+        return axios.get(url, {headers: {"Authorization": jwtToken }});
+    },
+
     fetchAllRooms: ()=>{
         const url='http://localhost:8080/timetable/rooms';
         return axios.get(url);
+    },
+
+    fetchAllStudentGroups: () => {
+        const jwtToken = sessionStorage.getItem("jwt");
+        const url = 'http://localhost:8080/timetable/studentgroups'
+        return axios.get(url, {headers: {"Authorization": jwtToken }});
     },
 
     fetchStudentInfo:(index)=>{

@@ -7,9 +7,7 @@ import './Menu.css'
 const Menu = ({history})=> {
 
     const loggedin = sessionStorage.getItem("username");
-    console.log(loggedin);
     const role = sessionStorage.getItem("role");
-
     const logOut = (e) => {
         e.preventDefault();
         sessionStorage.removeItem("username");

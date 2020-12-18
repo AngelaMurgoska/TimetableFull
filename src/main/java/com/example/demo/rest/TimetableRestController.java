@@ -1,12 +1,10 @@
 package com.example.demo.rest;
 
-import com.example.demo.models.Professor;
-import com.example.demo.models.Semester;
-import com.example.demo.models.Student;
-import com.example.demo.models.StudentSubjects;
+import com.example.demo.models.*;
 import com.example.demo.models.exceptions.EmptyFileException;
 import com.example.demo.models.exceptions.MissingParametersException;
 import com.example.demo.models.nonEntity.csv.TimetableUpload;
+import com.example.demo.models.nonEntity.subjectSelections.StudentSubjectSelection;
 import com.example.demo.models.nonEntity.timetables.FilteredTimetable;
 import com.example.demo.models.nonEntity.timetables.StudentTimetable;
 import com.example.demo.service.calendar.GoogleCalendarService;
@@ -31,6 +29,7 @@ import java.util.stream.Collectors;
 public class TimetableRestController {
 
     private TimetableServiceImpl timetableService;
+    private SubjectServiceImpl subjectService;
     private ProfessorServiceImpl professorService;
     private SemesterServiceImpl semesterService;
     private StudentServiceImpl studentService;
@@ -40,8 +39,9 @@ public class TimetableRestController {
     private TimetableUploadServiceImpl timetableUploadService;
     private GoogleCalendarService googleCalendarService;
 
-    public TimetableRestController(TimetableServiceImpl timetableService, ProfessorServiceImpl professorService, SemesterServiceImpl semesterService, StudentServiceImpl studentService, StudentSubjectsServiceImpl studentSubjectsService, StudentTimetableServiceImpl studentTimetableService,FilteredTimetableServiceImpl filteredTimetableService, TimetableUploadServiceImpl timetableUploadService, GoogleCalendarService googleCalendarService) {
+    public TimetableRestController(TimetableServiceImpl timetableService, SubjectServiceImpl subjectService, ProfessorServiceImpl professorService, SemesterServiceImpl semesterService, StudentServiceImpl studentService, StudentSubjectsServiceImpl studentSubjectsService, StudentTimetableServiceImpl studentTimetableService,FilteredTimetableServiceImpl filteredTimetableService, TimetableUploadServiceImpl timetableUploadService, GoogleCalendarService googleCalendarService) {
         this.timetableService = timetableService;
+        this.subjectService = subjectService;
         this.professorService = professorService;
         this.semesterService = semesterService;
         this.studentService = studentService;
@@ -50,6 +50,10 @@ public class TimetableRestController {
         this.filteredTimetableService=filteredTimetableService;
         this.timetableUploadService=timetableUploadService;
         this.googleCalendarService = googleCalendarService;
+    }
+
+    @GetMapping("/subjects")
+    public List<Subject> getAllSubjects(){ return subjectService.getAllSubjects();
     }
 
     @GetMapping("/professors")
@@ -62,6 +66,11 @@ public class TimetableRestController {
         return timetableService.getAllRooms();
     }
 
+    @GetMapping("/studentgroups")
+    public List<String> getAllStudentGroups(){
+        return timetableService.getAllStudentGroups();
+    }
+
     @GetMapping("{index}")
     public Student getStudentInfo(@PathVariable("index") String studentindex) {
         return studentService.getByStuIndex(Long.parseLong(studentindex));
@@ -70,6 +79,12 @@ public class TimetableRestController {
     @GetMapping("studentemail/{email}")
     public Student getStudentAuthenticationInfo(@PathVariable("email") String email) {
         return studentService.getByStuEmail(email);
+    }
+
+    /*populating student's timetable according to their selection*/
+    @PostMapping("create-timetable/{index}")
+    public void createStudentTimetable(@PathVariable("index") String studentindex, @RequestBody List<StudentSubjectSelection> selectedTimetable) {
+
     }
 
     /*the timetable for a student that appears after the student logs in*/

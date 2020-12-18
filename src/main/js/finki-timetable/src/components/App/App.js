@@ -9,6 +9,7 @@ import StudentInfo from "../StudentInfo/StudentInfo";
 import TimetableUpload from "../TimetableUpload/TimetableUpload";
 import {Col, Row} from "react-bootstrap";
 import Menu from "../Menu/Menu";
+import SubjectSetup from "../SubjectSetup/SubjectSetup";
 
 class App extends Component {
 
@@ -121,6 +122,10 @@ class App extends Component {
             }))
     }
 
+    checkIfTimetableAbsent = () => {
+        return this.state.timetableProps.events.monday.length == 0 && this.state.timetableProps.events.tuesday.length == 0 && this.state.timetableProps.events.wednesday.length == 0 && this.state.timetableProps.events.thursday.length == 0 && this.state.timetableProps.events.friday.length == 0
+    }
+
     render() {
        const studentIndex= this.props.match.params.studentId;
        if(studentIndex==null){
@@ -144,13 +149,19 @@ class App extends Component {
            )
        }
        else{
+           let timetable;
+           if (this.checkIfTimetableAbsent()) {
+               timetable = <SubjectSetup studentindex = {studentIndex}/>
+           } else {
+               timetable = <Timetable {...this.state.timetableProps} />
+           }
            return (
                <React.Fragment>
                    <Menu/>
                    <Section>
                        <StudentInfo studentIndex={studentIndex} populateStudentTimetable={this.populateStudentTimetable}/>
                    </Section>
-                   <Timetable {...this.state.timetableProps} />
+                   {timetable}
                </React.Fragment>
            )
        }

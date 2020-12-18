@@ -33,7 +33,11 @@ class TimetableUpload extends Component{
         }
 
         if(this.state.file!=null && message===""){
-            FinkiTimetableService.uploadFile(this.state.file,type,academicYear);
+            FinkiTimetableService.uploadFile(this.state.file,type,academicYear).then((response) => {
+                console.log(response.data)
+            }).catch((error) => {
+                console.log(error.response.data)
+            });
         }
 
     }

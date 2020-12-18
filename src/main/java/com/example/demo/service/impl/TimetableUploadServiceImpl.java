@@ -50,26 +50,20 @@ public class TimetableUploadServiceImpl implements TimetableUploadService {
         for (TimetableUpload timetableUpload : inputData) {
 
             //odreduvanje na modul
-            String[] studentgroup = timetableUpload.getModule().split("-");
-            String module = studentgroup[0].trim();
-            long semesterNo = Long.parseLong(studentgroup[1].trim()) * 2 - 1;
-            if (!Character.isUpperCase(module.charAt(1))) {
-                studentgroup = module.split(" ");
-                module = studentgroup[1];
-            }
+            String studentGroup = timetableUpload.getModule();
 
-            String identifier = timetableUpload.getProfessor() + " " + timetableUpload.getSubject() + " " + timetableUpload.getRoom() + " " + module;
+            String identifier = timetableUpload.getProfessor() + " " + timetableUpload.getSubject() + " " + timetableUpload.getRoom() + " " + studentGroup;
 
             if (!timetables.containsKey(identifier)) {
 
                 //vnesuvanje na profesori i asistenti
                 Professor professor = professorService.getProfessorByName(timetableUpload.getProfessor());
 
-                Subject subject = subjectService.getByNameAndSemesterNo(timetableUpload.getSubject(), semesterNo);
+                Subject subject = subjectService.getByName(timetableUpload.getSubject());
 
                 Timetable newTimetable = new Timetable(8 + Long.parseLong(timetableUpload.getHourFrom()),
                         9 + Long.parseLong(timetableUpload.getHourFrom()), Long.parseLong(timetableUpload.getDay()), timetableUpload.getRoom(),
-                        module, professor, subject, semester, version + 1);
+                        studentGroup, professor, subject, semester, version + 1);
                 timetables.put(identifier, newTimetable);
             } else {
                 Timetable existingTimetable = timetables.get(identifier);

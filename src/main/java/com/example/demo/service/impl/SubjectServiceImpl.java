@@ -28,7 +28,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject getByNameAndSemesterNo(String name, Long semesterNo) {
-        return  repo.findByNameAndSemesterNo(name,semesterNo);
+    public Subject getByName(String name) {
+        return  repo.findByName(name);
     }
 }
