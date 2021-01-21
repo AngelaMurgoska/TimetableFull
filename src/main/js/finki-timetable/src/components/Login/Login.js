@@ -3,6 +3,7 @@ import {Image, Nav, NavbarBrand} from "react-bootstrap";
 import logo from "../../logo.png";
 import {Link, Redirect} from "react-router-dom";
 import axiosFinkiTimetableRepository from "../../repository/axiosFinkiTimetableRepository";
+import { withRouter } from 'react-router-dom';
 
 class Login extends Component {
     constructor(props) {
@@ -27,10 +28,9 @@ class Login extends Component {
                     sessionStorage.setItem("username",this.state.username);
                      axiosFinkiTimetableRepository.fetchLoggedInUserRole(this.state.username).then(data=>{
                         sessionStorage.setItem("role", data.data.name);
-                        console.log(data.data.name);
                         this.setState({role: data.data.name});
-                    })
-                    this.setState({isAuthenticated: true});
+                        this.setState({isAuthenticated: true})
+                    });
                 }
                 else {
                     alert('Неуспешна најава');
@@ -41,17 +41,16 @@ class Login extends Component {
     };
 
     render() {
-        if (this.state.isAuthenticated === true) {
-            return <Redirect to={'/'} />
-        }
-        else {
+        if (this.state.isAuthenticated) {
+            return <Redirect to={"/"}/>
+        } else {
             return (
                 <React.Fragment>
-                    <Nav className={"navbar fixed-top navbar-light bg-light"} >
+                    <Nav className={"navbar fixed-top navbar-light bg-light"}>
                         <NavbarBrand>
-                        <Image src={logo} fluid />
-                        <span><Link to={"/"}>Распоред на часови</Link></span>
-                    </NavbarBrand>
+                            <Image src={logo} fluid/>
+                            <span><Link to={"/"} className={"text-decoration-none"}> Распоред на часови</Link></span>
+                        </NavbarBrand>
                     </Nav>
                     <div id="login">
                         <h4 className="text-center pt-5">Најава</h4>
@@ -61,20 +60,26 @@ class Login extends Component {
                                     <div id="login-box" className="col-md-12">
                                         <div className="form-group">
                                             <label htmlFor={"username"}>Корисничко име</label>
-                                            <input  id="username" type="text" name="username" onChange={this.handleChange}  className="form-control" placeholder="username" />
+                                            <input id="username" type="text" name="username"
+                                                   onChange={this.handleChange} className="form-control"
+                                                   placeholder="username"/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor={"password"}>Лозинка</label>
-                                            <input id="password" type="password" name="password" onChange={this.handleChange}  className="form-control" placeholder="password" />
+                                            <input id="password" type="password" name="password"
+                                                   onChange={this.handleChange} className="form-control"
+                                                   placeholder="password"/>
                                         </div>
-                                        <input type="submit" name="submit" onClick={this.login}  className="btn btn-info btn-md" value="Login"/>
+                                        <input type="submit" name="submit" onClick={this.login}
+                                               className="btn btn-info btn-md" value="Login"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </React.Fragment>
-            );}
+            );
+        }
     }
 }
 

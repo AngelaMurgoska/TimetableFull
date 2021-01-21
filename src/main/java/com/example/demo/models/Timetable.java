@@ -1,10 +1,14 @@
 package com.example.demo.models;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name="timetable")
 public class Timetable {
 
@@ -13,7 +17,9 @@ public class Timetable {
     private Long id;
 
     private Long hourFrom;
+
     private Long hourTo;
+
     private Long day;
 
     @Nationalized
@@ -39,93 +45,26 @@ public class Timetable {
     private Semester semester;
 
     public Timetable(Long hourFrom, Long hourTo, Long day, String room, String studentgroup, Professor professor, Subject subject, Semester semester, Long version) {
-    this.hourFrom=hourFrom;
-    this.hourTo=hourTo;
-    this.day=day;
-    this.room=room;
-    this.studentgroup=studentgroup;
-    this.professor=professor;
-    this.subject=subject;
-    this.semester=semester;
-    this.version=version;
-    }
-
-    public Timetable(){}
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getHourFrom() {
-        return hourFrom;
-    }
-
-    public void setHourFrom(Long hourFrom) {
         this.hourFrom = hourFrom;
-    }
-
-    public Long getHourTo() {
-        return hourTo;
-    }
-
-    public void setHourTo(Long hourTo) {
         this.hourTo = hourTo;
-    }
-
-    public Long getDay() {
-        return day;
-    }
-
-    public void setDay(Long day) {
         this.day = day;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
         this.room = room;
-    }
-
-    public String getStudentgroup() {
-        return studentgroup;
-    }
-
-    public void setStudentgroup(String studentgroup) {
         this.studentgroup = studentgroup;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
+        this.professor = professor;
+        this.subject = subject;
+        this.semester = semester;
         this.version = version;
     }
 
-    public Professor getProfessor() {
-        return professor;
+    /*hh:mm, hours 8 and 0 become 08:00 and 09:00*/
+    public String getHourFromInDoubleDigitFormatWithMinutes() {
+        String startTime = hourFrom < 10 ? "0" + String.valueOf(hourFrom) : String.valueOf(hourFrom);
+        return startTime + ":00";
     }
 
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    public Semester getSemester() {
-        return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
+    /*hh:mm, hours 8 and 0 become 08:00 and 09:00*/
+    public String getHourToInDoubleDigitFormatWithMinutes() {
+        String endTime = hourTo < 10 ? "0" + String.valueOf(hourTo) : String.valueOf(hourTo);
+        return endTime + ":00";
     }
 }

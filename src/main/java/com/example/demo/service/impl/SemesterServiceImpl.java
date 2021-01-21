@@ -6,6 +6,7 @@ import com.example.demo.repository.JpaSemesterRepository;
 import com.example.demo.service.SemesterService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,10 +45,12 @@ public class SemesterServiceImpl implements SemesterService{
     }
 
     @Override
-    public void createNewSemester(Long semesterType, String academicYear) {
-        Semester newSemester=new Semester(semesterType,academicYear);
+    public void createNewSemester(Long semesterType, String academicYear, LocalDate startDate, LocalDate endDate) {
+        Semester newSemester=new Semester(semesterType,academicYear, startDate, endDate);
         save(newSemester);
         Long currentLatestSemester=getMaxOverallSemesterNo();
+        currentLatestSemester = currentLatestSemester != null ? currentLatestSemester : 0L;
         newSemester.setOverallSemesterNo(currentLatestSemester+1);
     }
+
 }

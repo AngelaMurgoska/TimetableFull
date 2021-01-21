@@ -17,20 +17,16 @@ public interface TimetableService {
 
     List<String> getAllRooms();
 
-    List<String> getAllStudentGroups();
+    List<String> getAllCurrentStudentGroups();
 
-    Optional<Long> getLatestTimetableVersionInSemester(Long semId);
+    Long getLatestTimetableVersionInSemester(Long semId);
 
-    Timetable getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId,Long subjId,Long semId,String studentgroup,Long version);
+    List<Timetable> getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId,Long subjId,Long semId,String studentgroup,Long version);
+
+    List<Timetable> getByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(Long professorId, String room, String studentGroup, Long semesterId, Long version);
 
     List<Timetable> getBySubjectIdAndSemesterIdAndStudentgroupAndVersion(Long subjId, Long semId, String studentgroup, Long version);
 
     Collection<Timetable> saveAll(Collection<Timetable> exams);
-
-    List<Timetable> getByProfessorIdAndSemesterIdAndRoomAndVersion(Long profId, Long semId, String room,Long version);
-
-    List<Timetable> getByProfessorIdAndSemesterIdAndVersion(Long profId, Long semId, Long version);
-
-    List<Timetable> getBySemesterIdAndRoomAndVersion(Long semId,String room,Long version);
 
 }

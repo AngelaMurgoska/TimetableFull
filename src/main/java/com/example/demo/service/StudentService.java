@@ -18,4 +18,5 @@ public interface StudentService {
     void deleteCurrentCalendarEventsFromStudent(Student student);
 
     void saveTimetableCalendarEventsForStudent(Student student, List<String> eventIds);
+
 }

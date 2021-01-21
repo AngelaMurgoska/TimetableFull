@@ -36,14 +36,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    //TODO fix routes that should be private and fix upload timetable route
+    //TODO fix routes that should be accessed with roles
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers("/timetable/professors","/timetable/rooms","/timetable/filter/*").permitAll()
-                .antMatchers("/timetable/student/*").hasRole("STUDENT")
-                //.antMatchers("/timetable/upload-timetable").hasRole("STAFF")
+                .antMatchers("/timetable/professors","/timetable/rooms","/timetable/studentgroups","/timetable/latestSemester","/timetable/filter/*").permitAll()
+                .antMatchers("/timetable/student/*", "/timetable/add-to-calendar/*", "/timetable/create-timetable/*").hasRole("STUDENT")
+                .antMatchers("/timetable/upload-timetable").hasRole("STAFF")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new LoginFilter("/login", authenticationManager()),
@@ -61,7 +61,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
         config.applyPermitDefaultValues();
-
         source.registerCorsConfiguration("/**", config);
         return source;
     }

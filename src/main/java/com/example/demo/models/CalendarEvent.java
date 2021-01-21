@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="calendarevent")
 public class CalendarEvent {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +26,5 @@ public class CalendarEvent {
         this.eventId = eventId;
         this.student = student;
     }
+
 }

@@ -1,11 +1,13 @@
 package com.example.demo.service.calendar;
 
 import com.example.demo.models.CalendarEvent;
+import com.example.demo.models.Semester;
 import com.example.demo.models.Student;
 import com.example.demo.models.nonEntity.timetables.StudentTimetable;
+import com.example.demo.service.SemesterService;
+import com.example.demo.service.StudentService;
 import com.example.demo.service.impl.StudentServiceImpl;
 import com.example.demo.utils.DateManipulator;
-import com.example.demo.utils.StringManipulator;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -28,9 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,10 +39,13 @@ import java.util.List;
 @Service
 public class GoogleCalendarService {
 
-    private StudentServiceImpl studentService;
+    private StudentService studentService;
+    private SemesterService semesterService;
 
     private static final String APPLICATION_NAME = "Timetable";
+
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
     /**
@@ -50,10 +53,12 @@ public class GoogleCalendarService {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
+
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
-    public GoogleCalendarService(StudentServiceImpl studentService) {
+    public GoogleCalendarService(StudentService studentService, SemesterService semesterService) {
         this.studentService = studentService;
+        this.semesterService = semesterService;
     }
 
     /**
@@ -95,6 +100,8 @@ public class GoogleCalendarService {
 
         Calendar service = setupCalendarService();
 
+        Semester currentSemester = semesterService.getLatestSemester();
+
         Long studentIndex = studentTimetables.get(0).getStudentindex();
         Student currentStudent = studentService.getByStuIndex(studentIndex);
 
@@ -103,23 +110,15 @@ public class GoogleCalendarService {
         studentService.deleteCurrentCalendarEventsFromStudent(currentStudent);
 
         List<String> eventIds = new ArrayList<>();
-        LocalDate today =  LocalDate.now();
+        LocalDate semesterStartDate =  currentSemester.getStartDate();
         LocalDate baseDate;
-        baseDate = DateManipulator.returnClosestWeekdayFromDate(today);
+        baseDate = DateManipulator.returnClosestWeekdayFromDate(semesterStartDate);
         LocalDate classDate;
 
         for (StudentTimetable studentTimetableEvent : studentTimetables) {
             Event event = new Event().setSummary(studentTimetableEvent.getSubjectName());
-            String classStartTime = studentTimetableEvent.getStartTime();
-            String classEndTime = studentTimetableEvent.getEndTime();
-
-            /*in the database, time before 10 is written as 9 instead of 09*/
-            if (classStartTime.length() < 4) {
-                classStartTime = StringManipulator.addLeadingZeroToNumber(classStartTime);
-            }
-            if (classEndTime.length() < 4) {
-                classEndTime = StringManipulator.addLeadingZeroToNumber(classEndTime);
-            }
+            String classStartTime = studentTimetableEvent.getStartTimeInDoubleDigitFormat();
+            String classEndTime = studentTimetableEvent.getEndTimeInDoubleDigitFormat();
 
             int classDayDifferenceFromBaseDate = Math.toIntExact(studentTimetableEvent.getDay()) - baseDate.getDayOfWeek().getValue();
 
@@ -140,7 +139,10 @@ public class GoogleCalendarService {
 
             //until: the date when the semester is supposed to end, on midnight
             //TODO what does the Z mean at the end
-            String[] recurrence = new String[] {"RRULE:FREQ=WEEKLY;UNTIL=20210110T000000Z"};
+            LocalDate semesterEndDate = currentSemester.getEndDate();
+            String semesterEndDateString = semesterEndDate.toString();
+            semesterEndDateString = semesterEndDateString.replaceAll("-", "");
+            String[] recurrence = new String[] {"RRULE:FREQ=WEEKLY;UNTIL=" + semesterEndDateString + "T000000Z"};
             event.setRecurrence(Arrays.asList(recurrence));
             String calendarId = "primary";
             event = service.events().insert(calendarId, event).execute();
@@ -155,7 +157,10 @@ public class GoogleCalendarService {
         Calendar service = setupCalendarService();
         if (events != null) {
             for (CalendarEvent event : events) {
-                service.events().delete("primary", event.getEventId()).execute();
+                Event oldEvent = service.events().get("primary", event.getEventId()).execute();
+                if (oldEvent != null && !oldEvent.getStatus().equals("cancelled")) {
+                    service.events().delete("primary", event.getEventId()).execute();
+                }
             }
         }
     }

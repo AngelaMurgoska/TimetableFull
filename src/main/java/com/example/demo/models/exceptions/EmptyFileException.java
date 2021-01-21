@@ -1,7 +1,8 @@
 package com.example.demo.models.exceptions;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(reason = "The uploaded file is empty")
+@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "The uploaded file is empty")
 public class EmptyFileException extends RuntimeException{
 }

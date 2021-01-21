@@ -17,6 +17,7 @@ class App extends Component {
        super(props, context);
         this.state = {
             student:{},
+            timetablePresent: "no info",
             timetableProps: {
                 events: {
                     monday:[],
@@ -51,36 +52,36 @@ class App extends Component {
         };
     }
 
-    populateFilteredTimetable = (professorId, room) =>{
-        FinkiTimetableService.fetchFilteredTimetableForDay(1,professorId,room).then(data=>
+    populateFilteredTimetable = (professorId, room, studentGroup) =>{
+        FinkiTimetableService.fetchFilteredTimetableForDay(1,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.monday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(2,professorId,room).then(data=>
+        FinkiTimetableService.fetchFilteredTimetableForDay(2,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.tuesday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(3,professorId,room).then(data=>
+        FinkiTimetableService.fetchFilteredTimetableForDay(3,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.wednesday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(4,professorId,room).then(data=>
+        FinkiTimetableService.fetchFilteredTimetableForDay(4,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.thursday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(5,professorId,room).then(data=>
+        FinkiTimetableService.fetchFilteredTimetableForDay(5,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.friday= data.data;
@@ -122,25 +123,32 @@ class App extends Component {
             }))
     }
 
-    checkIfTimetableAbsent = () => {
-        return this.state.timetableProps.events.monday.length == 0 && this.state.timetableProps.events.tuesday.length == 0 && this.state.timetableProps.events.wednesday.length == 0 && this.state.timetableProps.events.thursday.length == 0 && this.state.timetableProps.events.friday.length == 0
+    componentDidMount() {
+        const studentIndex = this.props.match.params.studentId;
+        if (studentIndex == null) {
+            this.setState({timetablePresent: false})
+        } else {
+            FinkiTimetableService.checkIfStudentHasSubjectsInCurrentSemester(studentIndex).then((response) => {
+                console.log(response.data)
+                this.setState(
+                    {timetablePresent: response.data}
+                )
+            });
+        }
     }
 
     render() {
-       const studentIndex= this.props.match.params.studentId;
+       const studentIndex = this.props.match.params.studentId;
        if(studentIndex==null){
            return (
                <React.Fragment>
                    <Menu/>
+                   {(sessionStorage.getItem("jwt") && sessionStorage.getItem("role")==="ROLE_STAFF") ? <Row>
+                       <Col><Section><TimetableUpload/></Section></Col></Row> : <span></span>}
                    <Row>
-                       <Col md={7}>
-                           <Section>
-                               <SearchBar populateFilteredTimetable={this.populateFilteredTimetable}/>
-                           </Section>
-                       </Col>
                        <Col>
                            <Section>
-                               {(sessionStorage.getItem("jwt") && sessionStorage.getItem("role")==="ROLE_STAFF") ? <TimetableUpload/> : <span></span>}
+                               <SearchBar populateFilteredTimetable={this.populateFilteredTimetable}/>
                            </Section>
                        </Col>
                    </Row>
@@ -148,22 +156,28 @@ class App extends Component {
                </React.Fragment>
            )
        }
-       else{
-           let timetable;
-           if (this.checkIfTimetableAbsent()) {
-               timetable = <SubjectSetup studentindex = {studentIndex}/>
+       else {
+           let timetable, subjectSelection;
+           if (this.state.timetablePresent === "no info") {
+               return <div></div>
            } else {
-               timetable = <Timetable {...this.state.timetableProps} />
+               if (this.state.timetablePresent) {
+                   timetable = <Timetable {...this.state.timetableProps} />
+                   subjectSelection = false
+               } else {
+                   timetable = <SubjectSetup studentindex = {studentIndex}/>
+                   subjectSelection = true
+               }
+               return (
+                   <React.Fragment>
+                       <Menu/>
+                       <Section>
+                           <StudentInfo studentIndex={studentIndex} populateStudentTimetable={this.populateStudentTimetable} subjectSelection = {subjectSelection}/>
+                       </Section>
+                       {timetable}
+                   </React.Fragment>
+               )
            }
-           return (
-               <React.Fragment>
-                   <Menu/>
-                   <Section>
-                       <StudentInfo studentIndex={studentIndex} populateStudentTimetable={this.populateStudentTimetable}/>
-                   </Section>
-                   {timetable}
-               </React.Fragment>
-           )
        }
     }
 }

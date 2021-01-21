@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Row, Form, Col, Dropdown} from "react-bootstrap";
 import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
 import Button from "react-bootstrap/Button";
-
+import SearchInput from "../SearchInput/SearchInput";
 
 class SearchBar extends Component{
 
@@ -11,67 +11,80 @@ class SearchBar extends Component{
         this.state={
             professors: [],
             rooms: [],
+            studentGroups: [],
             selectedProfessor: "",
             selectedRoom: "",
+            selectedStudentGroup: ""
         };
         this.handleProfessorChange=this.handleProfessorChange.bind(this);
         this.handleRoomChange=this.handleRoomChange.bind(this);
+        this.handleStudentGroupChange=this.handleStudentGroupChange.bind(this);
         this.handleSubmit=this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         FinkiTimetableService.fetchAllProfessors().then(data => {
             let professorsFromApi=data.data.map(professor=>{
-                return { value:professor.id, display: professor.name }
+                return { value:professor.id, label: professor.name }
             });
             this.setState({
-               professors: [{value: '', display: 'Изберете професор'}].concat(professorsFromApi)
+               professors: professorsFromApi
             })
         })
         FinkiTimetableService.fetchAllRooms().then(data => {
             let roomsFromApi=data.data.map(room=>{
-                return { value: room, display: room }
+                return { value: room, label: room }
             });
             this.setState({
-                rooms: [{value: '', display: 'Изберете просторија'}].concat(roomsFromApi)
+                rooms: roomsFromApi
             })
+        })
+        FinkiTimetableService.fetchAllStudentGroups().then(data => {
+            let studentGroupsFromApi = data.data.map(studentGroup => {
+                return {value: studentGroup, label: studentGroup}
+            });
+            this.setState({studentGroups: studentGroupsFromApi})
         })
     }
 
-    handleProfessorChange(e){
-        this.setState({selectedProfessor: e.target.value})
+    handleProfessorChange(professor) {
+        professor ? this.setState({selectedProfessor: professor.value}) : this.setState({selectedProfessor: ""})
     }
 
-    handleRoomChange(e){
-        this.setState({selectedRoom: e.target.value})
+    handleRoomChange(room){
+        room ? this.setState({selectedRoom: room.value}) : this.setState({selectedRoom: ""})
+    }
+
+    handleStudentGroupChange(studentGroup) {
+        studentGroup ? this.setState({selectedStudentGroup: studentGroup.value}) : this.setState({selectedStudentGroup: ""})
     }
 
     handleSubmit(e){
         e.preventDefault();
-        if(this.state.selectedProfessor!=="" || this.state.selectedRoom!=="")
-         this.props.populateFilteredTimetable(this.state.selectedProfessor,this.state.selectedRoom);
+        if(this.state.selectedProfessor!=="" || this.state.selectedRoom!=="" || this.state.selectedStudentGroup !== "")
+         this.props.populateFilteredTimetable(this.state.selectedProfessor,this.state.selectedRoom, this.state.selectedStudentGroup);
     }
 
     render() {
         return (
-            <div>
-                <h4>Опции за филтрирање</h4>
-                <Row>
-                    <Col>
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group controlId="exampleForm.ControlSelect1">
-                                <Form.Control as="select" value={this.state.selectedProfessor} onChange={this.handleProfessorChange} className={"my-1"}>
-                                    {this.state.professors.map((professor) => <option key={professor.value} value={professor.value}>{professor.display}</option>)}
-                                </Form.Control>
-                                <Form.Control as="select" value={this.state.selectedRoom}  onChange={this.handleRoomChange} className={"my-1"}>
-                                    {this.state.rooms.map((room) => <option key={room.value} value={room.value}>{room.display}</option>)}
-                                </Form.Control>
-                            </Form.Group>
-                            <Button variant="primary" type="submit">Пребарај</Button>
-                        </Form>
-                    </Col>
-                    <Col></Col>
-                </Row>
+            <div className={"mb-3"}>
+                <h4 className={"mb-3 "}>Опции за филтрирање</h4>
+                <Form  onSubmit={this.handleSubmit}>
+                    <Row className={"align-items-center"}>
+                        <Col>
+                            <SearchInput isClearable = {true} onChangeMethod = {this.handleProfessorChange} searchPlaceholder = "Изберете професор" searchData = {this.state.professors}/>
+                        </Col>
+                        <Col>
+                            <SearchInput isClearable = {true} onChangeMethod = {this.handleRoomChange} searchPlaceholder = "Изберете просторија" searchData = {this.state.rooms}/>
+                        </Col>
+                        <Col>
+                            <SearchInput isClearable = {true} onChangeMethod = {this.handleStudentGroupChange} searchPlaceholder = "Изберете група" searchData = {this.state.studentGroups}/>
+                        </Col>
+                        <Col>
+                            <Button  variant="primary" type="submit">Пребарај</Button>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
         )
     }

@@ -1,21 +1,33 @@
 package com.example.demo.models.nonEntity.timetables;
 
+import lombok.Data;
 
+@Data
 public class StudentTimetable {
 
     private String name;
+
     private String surname;
+
     private Long studentindex;
+
     private String module;
 
     private String subjectName;
+
     private String professorName;
+
     private String group;
 
     private String room;
+
     private String startTime;
+
     private String endTime;
+
     private Long day;
+
+    public StudentTimetable() {}
 
     public StudentTimetable(String name, String surname, Long studentindex, String module, String subjectName, String professorName, String group, String room, String hourFrom, String hourTo, Long day) {
         this.name = name;
@@ -31,50 +43,14 @@ public class StudentTimetable {
         this.day=day;
     }
 
-    public String getName() {
-        return name;
+    /*8 and 9 will be returned as 08 and 09*/
+    public String getStartTimeInDoubleDigitFormat() {
+       return startTime.length() < 4 ? "0" + startTime : startTime;
     }
 
-    public String getSurname() {
-        return surname;
+    /*8 and 9 will be returned as 08 and 09*/
+    public String getEndTimeInDoubleDigitFormat() {
+        return endTime.length() < 4 ? "0" + endTime : endTime;
     }
 
-    public Long getStudentindex() {
-        return studentindex;
-    }
-
-    public String getModule() {
-        return module;
-    }
-
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-
-    public String getProfessorName() {
-        return professorName;
-    }
-
-
-    public String getGroup() {
-        return group;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public Long getDay() {
-        return day;
-    }
 }

@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.models.Semester;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,5 +18,6 @@ public interface SemesterService {
 
     Long getMaxOverallSemesterNo();
 
-    void createNewSemester(Long semesterType, String academicYear);
+    void createNewSemester(Long semesterType, String academicYear, LocalDate startDate, LocalDate endDate);
+
 }

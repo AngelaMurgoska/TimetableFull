@@ -1,10 +1,12 @@
 package com.example.demo.models;
 
+import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name="studentsubjects")
 public class StudentSubjects {
 
@@ -32,48 +34,5 @@ public class StudentSubjects {
     @JoinColumn(name = "semester_id", updatable = false)
     private Semester semester;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getStudentGroupTimetable() {
-        return studentGroupTimetable;
-    }
-
-    public void setStudentGroupTimetable(String studentGroupTimetable) {
-        this.studentGroupTimetable = studentGroupTimetable;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
-
-    public Semester getSemester() {
-        return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
-    }
 }
 

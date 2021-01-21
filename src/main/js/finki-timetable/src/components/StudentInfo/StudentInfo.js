@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
 import {Button, Row} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
+import CalendarExport from "../CalendarExport/CalendarExport";
+import CurrentSemesterInfo from "../CurrentSemesterInfo/CurrentSemesterInfo";
 
 class StudentInfo extends Component{
 
@@ -31,15 +33,16 @@ class StudentInfo extends Component{
 
     render() {
         return(
-            <div>
+            <div className={"mb-3"}>
                 <Row>
                     <Col>
                         <h4>Распоред на часови за студентот:</h4>
                         <div>{this.state.student.name} {this.state.student.surname} {this.state.student.studentindex}</div>
+                        <CurrentSemesterInfo/>
                     </Col>
-                    <Col className={"text-right"}>
-                        <Button type={"primary"} onClick={this.addTimetableToGoogleCalendar}>Export to Google Calendar</Button>
-                    </Col>
+                    {!this.props.subjectSelection && <Col className={"text-right"}>
+                        <CalendarExport addTimetableToCalendar = {this.addTimetableToGoogleCalendar}/>
+                    </Col>}
                 </Row>
             </div>
         )

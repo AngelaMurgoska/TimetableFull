@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
 @Table(name="timetableuser")
 public class User implements UserDetails {
 
@@ -17,6 +19,7 @@ public class User implements UserDetails {
     private Long id;
 
     private String userName;
+
     private String password;
 
     @ManyToOne
@@ -26,8 +29,6 @@ public class User implements UserDetails {
         this.userName = userName;
         this.password = password;
     }
-
-    public User(){}
 
     public String getUserName() {
         return userName;

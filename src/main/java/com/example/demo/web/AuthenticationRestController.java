@@ -1,4 +1,4 @@
-package com.example.demo.rest;
+package com.example.demo.web;
 
 import com.example.demo.models.Role;
 import com.example.demo.models.User;

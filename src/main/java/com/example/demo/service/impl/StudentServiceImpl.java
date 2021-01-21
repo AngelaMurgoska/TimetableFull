@@ -16,6 +16,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private JpaStudentRepository studentRepository;
+
     private JpaCalendarEventRepository calendarEventRepository;
 
     public StudentServiceImpl(JpaStudentRepository studentRepository, JpaCalendarEventRepository calendarEventRepository){
@@ -52,6 +53,5 @@ public class StudentServiceImpl implements StudentService {
         }
         calendarEventRepository.saveAll(eventsForSaving);
     }
-
 
 }

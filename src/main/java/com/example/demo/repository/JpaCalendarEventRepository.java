@@ -16,4 +16,5 @@ public interface JpaCalendarEventRepository extends JpaRepository<CalendarEvent,
 
      @Override
      <S extends CalendarEvent> List<S> saveAll(Iterable<S> iterable);
+
 }

@@ -1,8 +1,14 @@
 package com.example.demo.models;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name="semester")
 public class Semester {
 
@@ -16,38 +22,15 @@ public class Semester {
 
     private Long overallSemesterNo;
 
-    public Semester(){}
+    private LocalDate startDate;
 
-    public Semester(Long semesterType, String academicYear){
+    private LocalDate endDate;
+
+    public Semester(Long semesterType, String academicYear, LocalDate startDate, LocalDate endDate){
         this.semesterType=semesterType;
         this.academicYear=academicYear;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getSemesterType() {
-        return semesterType;
-    }
-
-    public void setSemesterType(Long semesterType) {
-        this.semesterType = semesterType;
-    }
-
-    public String getAcademicYear() {
-        return academicYear;
-    }
-
-    public void setAcademicYear(String academicYear) {
-        this.academicYear = academicYear;
-    }
-
-    public Long getOverallSemesterNo() {
-        return overallSemesterNo;
-    }
-
-    public void setOverallSemesterNo(Long overallSemesterNo) {
-        this.overallSemesterNo = overallSemesterNo;
-    }
 }

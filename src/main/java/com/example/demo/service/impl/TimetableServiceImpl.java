@@ -1,22 +1,23 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.models.Semester;
 import com.example.demo.models.Timetable;
 import com.example.demo.repository.JpaTimetableRepository;
+import com.example.demo.service.SemesterService;
 import com.example.demo.service.TimetableService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalLong;
+import java.util.*;
 
 @Service
 public class TimetableServiceImpl implements TimetableService {
 
     private JpaTimetableRepository repo;
+    private SemesterService semesterService;
 
-    public TimetableServiceImpl(JpaTimetableRepository repo){
+    public TimetableServiceImpl(JpaTimetableRepository repo, SemesterServiceImpl semesterService){
         this.repo=repo;
+        this.semesterService = semesterService;
     }
 
     @Override
@@ -31,22 +32,40 @@ public class TimetableServiceImpl implements TimetableService {
 
     @Override
     public List<String> getAllRooms() {
-        return repo.getAllRooms();
+        List<String> rooms = repo.getAllRooms();
+        if (rooms != null) {
+            return rooms;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override
-    public List<String> getAllStudentGroups() {
-        return repo.getAllStudentGroups();
+    public List<String> getAllCurrentStudentGroups() {
+        Long currentSemesterId = semesterService.getLatestSemester().getId();
+        Long latestTimetableVersion = getLatestTimetableVersionInSemester(currentSemesterId);
+        List<String> studentGroups = repo.getAllStudentGroups(currentSemesterId, latestTimetableVersion);
+        if (studentGroups != null) {
+            return  studentGroups;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override
-    public Optional<Long> getLatestTimetableVersionInSemester(Long semId) {
-        return repo.findLatestTimetableVersionInSemester(semId);
+    public Long getLatestTimetableVersionInSemester(Long semId) {
+        Optional<Long> version = repo.findLatestTimetableVersionInSemester(semId);
+        return version.orElseGet(() -> 0L);
     }
 
     @Override
-    public Timetable getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId, Long subjId, Long semId, String studentgroup, Long version) {
+    public List<Timetable> getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId, Long subjId, Long semId, String studentgroup, Long version) {
         return repo.findByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(profId, subjId, semId, studentgroup, version);
+    }
+
+    @Override
+    public List<Timetable> getByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(Long professorId, String room, String studentGroup, Long semesterId, Long version) {
+        return repo.findByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(professorId, room, studentGroup, semesterId, version);
     }
 
     @Override
@@ -58,21 +77,5 @@ public class TimetableServiceImpl implements TimetableService {
     public Collection<Timetable> saveAll(Collection<Timetable> exams) {
         return repo.saveAll(exams);
     }
-
-    @Override
-    public List<Timetable> getByProfessorIdAndSemesterIdAndRoomAndVersion(Long profId, Long semId, String room, Long version) {
-        return repo.findByProfessorIdAndSemesterIdAndRoomAndVersion(profId, semId, room,version);
-    }
-
-    @Override
-    public List<Timetable> getByProfessorIdAndSemesterIdAndVersion(Long profId, Long semId,Long version) {
-        return repo.findByProfessorIdAndSemesterIdAndVersion(profId,semId,version);
-    }
-
-    @Override
-    public List<Timetable> getBySemesterIdAndRoomAndVersion(Long semId, String room, Long version) {
-        return repo.findBySemesterIdAndRoomAndVersion(semId, room,version);
-    }
-
 
 }

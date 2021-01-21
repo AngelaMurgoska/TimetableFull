@@ -12,4 +12,6 @@ public interface SubjectService {
     Optional<Subject> getById(Long id);
 
     Subject getByName(String name);
+
+    void saveSubject(String subjectName);
 }

@@ -5,7 +5,7 @@ import com.example.demo.models.Semester;
 import com.example.demo.models.Subject;
 import com.example.demo.models.Timetable;
 import com.example.demo.models.nonEntity.csv.TimetableUpload;
-import com.example.demo.service.TimetableUploadService;
+import com.example.demo.service.*;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,15 @@ import java.util.*;
 @Service
 public class TimetableUploadServiceImpl implements TimetableUploadService {
 
-    private ProfessorServiceImpl professorService;
-    private SubjectServiceImpl subjectService;
-    private SemesterServiceImpl semesterService;
-    private TimetableServiceImpl timetableService;
+    private ProfessorService professorService;
 
-    public TimetableUploadServiceImpl(ProfessorServiceImpl professorService, SubjectServiceImpl subjectService, SemesterServiceImpl semesterService, TimetableServiceImpl timetableService) {
+    private SubjectService subjectService;
+
+    private SemesterService semesterService;
+
+    private TimetableService timetableService;
+
+    public TimetableUploadServiceImpl(ProfessorService professorService, SubjectService subjectService, SemesterService semesterService, TimetableService timetableService) {
         this.professorService = professorService;
         this.subjectService = subjectService;
         this.semesterService = semesterService;
@@ -35,35 +38,34 @@ public class TimetableUploadServiceImpl implements TimetableUploadService {
     //dodavanje na nova verzija na raspored vo posledno dodadeniot semestar
     @Override
     public void saveDataFromCsvFile(List<TimetableUpload> inputData) {
-
         Map<String, Timetable> timetables = new HashMap<>();
-
         Semester semester = semesterService.getLatestSemester();
-
-        Optional<Long> latestVersionInSemester = timetableService.getLatestTimetableVersionInSemester(semester.getId());
-
-        long version;
-        if (latestVersionInSemester.isPresent()) version = latestVersionInSemester.get();
-        else version = 0;
+        Long latestVersionInSemester = timetableService.getLatestTimetableVersionInSemester(semester.getId());
 
         //timetableUpload = eden red od csv fajlot
         for (TimetableUpload timetableUpload : inputData) {
-
             //odreduvanje na modul
             String studentGroup = timetableUpload.getModule();
-
-            String identifier = timetableUpload.getProfessor() + " " + timetableUpload.getSubject() + " " + timetableUpload.getRoom() + " " + studentGroup;
+            String identifier = timetableUpload.getProfessor() + " " + timetableUpload.getSubject() + " " + timetableUpload.getRoom() + " " + studentGroup + " " + timetableUpload.getDay();
 
             if (!timetables.containsKey(identifier)) {
 
                 //vnesuvanje na profesori i asistenti
                 Professor professor = professorService.getProfessorByName(timetableUpload.getProfessor());
+                if(professor == null) {
+                    professorService.saveProfessor(timetableUpload.getProfessor());
+                    professor = professorService.getProfessorByName(timetableUpload.getProfessor());
+                }
 
                 Subject subject = subjectService.getByName(timetableUpload.getSubject());
+                if (subject == null) {
+                    subjectService.saveSubject(timetableUpload.getSubject());
+                    subject = subjectService.getByName(timetableUpload.getSubject());
+                }
 
                 Timetable newTimetable = new Timetable(8 + Long.parseLong(timetableUpload.getHourFrom()),
                         9 + Long.parseLong(timetableUpload.getHourFrom()), Long.parseLong(timetableUpload.getDay()), timetableUpload.getRoom(),
-                        studentGroup, professor, subject, semester, version + 1);
+                        studentGroup, professor, subject, semester, latestVersionInSemester + 1);
                 timetables.put(identifier, newTimetable);
             } else {
                 Timetable existingTimetable = timetables.get(identifier);
@@ -89,4 +91,5 @@ public class TimetableUploadServiceImpl implements TimetableUploadService {
             return null;
         }
     }
+
 }

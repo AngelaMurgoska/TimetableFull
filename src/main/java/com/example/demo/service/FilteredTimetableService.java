@@ -7,10 +7,6 @@ import java.util.List;
 
 public interface FilteredTimetableService {
 
-    List<FilteredTimetable> getFilteredTimetableByProfessorAndRoomLatestVersion(Semester semester,Long profId, String room);
-
-    List<FilteredTimetable> getFilteredTimetableByProfessorLatestVersion(Semester semester,Long profId);
-
-    List<FilteredTimetable> getFilteredTimetableByRoomLatestVersion(Semester semester, String room);
+    List<FilteredTimetable> getFilteredTimetableWithParameters(Semester semester, String professorId, String room, String studentGroup);
 
 }

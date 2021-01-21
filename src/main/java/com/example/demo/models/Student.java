@@ -1,10 +1,12 @@
 package com.example.demo.models;
 
+import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name="student")
 public class Student {
 
@@ -30,56 +32,5 @@ public class Student {
 
     private Long currentSemester; //koj semestar mu e po red na studentot
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public Long getStudentindex() {
-        return studentindex;
-    }
-
-    public void setStudentindex(Long studentindex) {
-        this.studentindex = studentindex;
-    }
-
-    public String getModule() {
-        return module;
-    }
-
-    public void setModule(String module) {
-        this.module = module;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getCurrentSemester() {
-        return currentSemester;
-    }
-
-    public void setCurrentSemester(Long currentSemester) {
-        this.currentSemester = currentSemester;
-    }
 }
 

@@ -25,25 +25,22 @@ public class StudentTimetableServiceImpl implements StudentTimetableService {
     @Override
     public List<StudentTimetable> getStudentTimetableLatestVersion(Student student, Semester semester, List<StudentSubjects> studentSubjects) {
         List<StudentTimetable> studentTimetableList = new ArrayList<>();;
-        Long lastTimetableVersion=timetableService.getLatestTimetableVersionInSemester(semester.getId()).get();
+        Long lastTimetableVersion=timetableService.getLatestTimetableVersionInSemester(semester.getId());
 
         for (StudentSubjects s : studentSubjects) {
-
-            List<Timetable> timetables=timetableService.getBySubjectIdAndSemesterIdAndStudentgroupAndVersion(s.getSubject().getId(),semester.getId(),s.getStudentGroupTimetable(),lastTimetableVersion);
-            for(Timetable timetable : timetables) {
-                if(s.getProfessor().getId().compareTo(timetable.getProfessor().getId())!=0 && !timetable.getProfessor().getName().contains("м-р"))
-                    continue;
-                String hourFrom;
-                if (timetable.getHourFrom() == 8 || timetable.getHourFrom() == 9) {
-                    hourFrom = "0" + timetable.getHourFrom() + ":00";
-                } else hourFrom = timetable.getHourFrom() + ":00";
-                StudentTimetable studentTimetable = new StudentTimetable(student.getName(), student.getSurname(),
-                        student.getStudentindex(), student.getModule(), s.getSubject().getName(), timetable.getProfessor().getName(),
-                        s.getStudentGroupTimetable(), timetable.getRoom(), hourFrom, timetable.getHourTo() + ":00", timetable.getDay());
-                studentTimetableList.add(studentTimetable);
+            List<Timetable> timetables = timetableService.getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(s.getProfessor().getId(),s.getSubject().getId(),semester.getId(),s.getStudentGroupTimetable(),lastTimetableVersion);
+            for (Timetable timetable : timetables) {
+                String hourFrom = timetable.getHourFromInDoubleDigitFormatWithMinutes();
+                String hourTo = timetable.getHourToInDoubleDigitFormatWithMinutes();
+                StudentTimetable studentTimetable = new StudentTimetable(student.getName(), student.getSurname(), student.getStudentindex(), student.getModule(), s.getSubject().getName(), timetable.getProfessor().getName(),
+                        s.getStudentGroupTimetable(), timetable.getRoom(), hourFrom, hourTo, timetable.getDay());
+                if (!studentTimetableList.contains(studentTimetable)) {
+                    studentTimetableList.add(studentTimetable);
+                }
             }
         }
 
         return studentTimetableList;
     }
+
 }

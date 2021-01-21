@@ -17,4 +17,5 @@ public interface JpaSemesterRepository extends JpaRepository<Semester,Long> {
 
     @Query("SELECT MAX(s.overallSemesterNo) FROM Semester s")
     Long getMaxOverallSemesterNo();
+
 }

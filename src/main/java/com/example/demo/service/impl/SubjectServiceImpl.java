@@ -31,4 +31,12 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject getByName(String name) {
         return  repo.findByName(name);
     }
+
+    @Override
+    public void saveSubject(String subjectName) {
+        Subject subject = new Subject();
+        subject.setName(subjectName);
+        repo.save(subject);
+    }
+
 }

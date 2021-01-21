@@ -1,10 +1,12 @@
 package com.example.demo.models;
 
+import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name="subject")
 public class Subject {
 
@@ -15,18 +17,6 @@ public class Subject {
     @Nationalized
     @Column(columnDefinition = "NVARCHAR(255)")
     private String name;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }
 
