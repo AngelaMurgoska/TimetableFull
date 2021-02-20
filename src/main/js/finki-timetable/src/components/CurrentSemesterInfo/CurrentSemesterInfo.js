@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
+import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 
 const CurrentSemesterInfo = (props) => {
 
     const [currentSemester, setCurrentSemester] = useState("");
 
     useEffect(() => {
-        FinkiTimetableService.fetchLatestSemester().then((latestSemester) => {
+        GeneralFinkiTimetableApi.fetchLatestSemester().then((latestSemester) => {
             setCurrentSemester(latestSemester.data);
         })
     }, []);

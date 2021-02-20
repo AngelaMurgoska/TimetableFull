@@ -1,6 +1,6 @@
 import axios,{ post } from 'axios';
 
-const FinkiTimetableService = {
+const GeneralFinkiTimetableApi = {
 
     validateSubjectSelection:(professorId, subjectId, studentGroup) => {
         const jwtToken = sessionStorage.getItem("jwt");
@@ -116,13 +116,6 @@ const FinkiTimetableService = {
         })
     },
 
-    fetchLoggedInUserRole:(username)=>{
-        const jwtToken = sessionStorage.getItem("jwt");
-        return axios.get(`http://localhost:8080/auth/role/${username}`,
-            {headers: {"Authorization": jwtToken }}
-        )
-    }
-
 }
 
-export default FinkiTimetableService;
+export default GeneralFinkiTimetableApi;

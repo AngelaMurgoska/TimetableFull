@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
+import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 import {Button, Row} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import CalendarExport from "../CalendarExport/CalendarExport";
@@ -16,7 +16,7 @@ class StudentInfo extends Component{
     }
 
     componentDidMount() {
-        FinkiTimetableService.fetchStudentInfo(this.props.studentIndex).then(data=>{
+        GeneralFinkiTimetableApi.fetchStudentInfo(this.props.studentIndex).then(data=>{
             this.setState({student: data.data})
         })
         this.props.populateStudentTimetable(this.props.studentIndex);
@@ -24,7 +24,7 @@ class StudentInfo extends Component{
 
     addTimetableToGoogleCalendar(e){
         e.preventDefault();
-        FinkiTimetableService.addTimetableToGoogleCalendar(this.state.student.studentindex).then((response) => {
+        GeneralFinkiTimetableApi.addTimetableToGoogleCalendar(this.state.student.studentindex).then((response) => {
             alert("Timetable successfully added to calendar");
         }).catch((response) => {
             alert("Something went wrong")

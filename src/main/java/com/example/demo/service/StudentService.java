@@ -19,4 +19,6 @@ public interface StudentService {
 
     void saveTimetableCalendarEventsForStudent(Student student, List<String> eventIds);
 
+    void saveStudent(Student student);
+
 }

@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
+import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 import {Col, Form, FormGroup, Row} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -51,7 +51,7 @@ class TimetableUpload extends Component{
             return
         }
 
-        FinkiTimetableService.uploadFile(this.state.file, type, academicYear, startDate, endDate).then((response) => {
+        GeneralFinkiTimetableApi.uploadFile(this.state.file, type, academicYear, startDate, endDate).then((response) => {
         }).catch((error) => {
             console.log(error.response.data)
         });

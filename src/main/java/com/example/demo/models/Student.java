@@ -1,12 +1,14 @@
 package com.example.demo.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name="student")
 public class Student {
 
@@ -24,13 +26,13 @@ public class Student {
 
     private Long studentindex;
 
-    @Nationalized
-    @Column(columnDefinition = "NVARCHAR(255)")
-    private String module;
-
     private String email;
 
-    private Long currentSemester; //koj semestar mu e po red na studentot
-
+    public Student(String name, String surname, Long studentindex, String email) {
+        this.name = name;
+        this.surname = surname;
+        this.studentindex = studentindex;
+        this.email = email;
+    }
 }
 

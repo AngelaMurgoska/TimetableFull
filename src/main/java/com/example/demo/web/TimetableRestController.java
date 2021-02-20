@@ -3,6 +3,7 @@ package com.example.demo.web;
 import com.example.demo.models.*;
 import com.example.demo.models.exceptions.EmptyFileException;
 import com.example.demo.models.exceptions.EmptyStudentTimetableException;
+import com.example.demo.models.exceptions.ExistingUserException;
 import com.example.demo.models.exceptions.MissingRequestParametersException;
 import com.example.demo.models.nonEntity.csv.TimetableUpload;
 import com.example.demo.models.nonEntity.subjectSelections.StudentSubjectSelection;

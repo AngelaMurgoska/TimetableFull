@@ -1,35 +1,42 @@
 package com.example.demo.web;
 
 import com.example.demo.models.Role;
+import com.example.demo.models.Student;
 import com.example.demo.models.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
+import com.example.demo.models.nonEntity.userInfo.StudentUser;
+import com.example.demo.service.StudentService;
+import com.example.demo.service.auth.UserRoleService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth/")
 public class AuthenticationRestController {
 
-    private UserRepository userRepository;
+    private UserRoleService userRoleService;
+    private StudentService studentService;
 
-    public AuthenticationRestController(UserRepository userRepository){
-        this.userRepository=userRepository;
+    public AuthenticationRestController(UserRoleService userRoleService, StudentService studentService){
+        this.userRoleService = userRoleService;
+        this.studentService = studentService;
     }
 
+    @PostMapping(value = "/register/student")
+    public User registerStudentUser(@RequestBody StudentUser studentUser){
+        User user = new User(studentUser.getEmail(), studentUser.getPassword());
+        Student student = new Student(studentUser.getName(), studentUser.getSurname(), studentUser.getStudentindex(),studentUser.getEmail());
+        studentService.saveStudent(student);
+        return userRoleService.registerUser(user, "ROLE_STUDENT");
+    }
+
+    @PostMapping(value = "/register/staff")
+    public User registerStaffUser(@RequestBody User user) {
+        return userRoleService.registerUser(user, "ROLE_STAFF");
+    }
+
+
     @GetMapping("/role/{username}")
-    public Role getUserRole(@PathVariable("username") String username){
-
-        Optional<User> userOptional=userRepository.findByUserName(username);
-        if(userOptional.isPresent()){
-            User user=userOptional.get();
-            return user.getUserRole();
-        }
-
-        return null;
+    public Role getUserRole(@PathVariable("username") String username) {
+        return userRoleService.getUserRoleForUsername(username);
     }
 
 }

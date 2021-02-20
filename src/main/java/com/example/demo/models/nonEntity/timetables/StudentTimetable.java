@@ -11,8 +11,6 @@ public class StudentTimetable {
 
     private Long studentindex;
 
-    private String module;
-
     private String subjectName;
 
     private String professorName;
@@ -29,11 +27,10 @@ public class StudentTimetable {
 
     public StudentTimetable() {}
 
-    public StudentTimetable(String name, String surname, Long studentindex, String module, String subjectName, String professorName, String group, String room, String hourFrom, String hourTo, Long day) {
+    public StudentTimetable(String name, String surname, Long studentindex, String subjectName, String professorName, String group, String room, String hourFrom, String hourTo, Long day) {
         this.name = name;
         this.surname = surname;
         this.studentindex = studentindex;
-        this.module = module;
         this.subjectName = subjectName;
         this.professorName = professorName;
         this.group = group;

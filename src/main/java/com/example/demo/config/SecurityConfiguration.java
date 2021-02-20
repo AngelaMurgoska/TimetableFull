@@ -41,12 +41,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers("/auth/register/*").permitAll()
                 .antMatchers("/timetable/professors","/timetable/rooms","/timetable/studentgroups","/timetable/latestSemester","/timetable/filter/*").permitAll()
                 .antMatchers("/timetable/student/*", "/timetable/add-to-calendar/*", "/timetable/create-timetable/*").hasRole("STUDENT")
                 .antMatchers("/timetable/upload-timetable").hasRole("STAFF")
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(new LoginFilter("/login", authenticationManager()),
+                .addFilterBefore(new LoginFilter("/login", authenticationManager(), userDetailsService),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new AuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class);

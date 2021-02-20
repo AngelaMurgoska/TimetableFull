@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import Timetable from "react-timetable-events";
-import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
+import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 import SearchBar from "../SearchBar/SearchBar";
 import moment from "moment";
 import Section from "../Section/Section";
@@ -53,35 +53,35 @@ class App extends Component {
     }
 
     populateFilteredTimetable = (professorId, room, studentGroup) =>{
-        FinkiTimetableService.fetchFilteredTimetableForDay(1,professorId,room, studentGroup).then(data=>
+        GeneralFinkiTimetableApi.fetchFilteredTimetableForDay(1,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.monday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(2,professorId,room, studentGroup).then(data=>
+        GeneralFinkiTimetableApi.fetchFilteredTimetableForDay(2,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.tuesday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(3,professorId,room, studentGroup).then(data=>
+        GeneralFinkiTimetableApi.fetchFilteredTimetableForDay(3,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.wednesday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(4,professorId,room, studentGroup).then(data=>
+        GeneralFinkiTimetableApi.fetchFilteredTimetableForDay(4,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.thursday= data.data;
                 return {timetableProps};
             })
         );
-        FinkiTimetableService.fetchFilteredTimetableForDay(5,professorId,room, studentGroup).then(data=>
+        GeneralFinkiTimetableApi.fetchFilteredTimetableForDay(5,professorId,room, studentGroup).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.friday= data.data;
@@ -91,31 +91,31 @@ class App extends Component {
     }
 
     populateStudentTimetable = (studentIndex)=>{
-        FinkiTimetableService.fetchStudentTimetableForDay(studentIndex,1).then(data=>
+        GeneralFinkiTimetableApi.fetchStudentTimetableForDay(studentIndex,1).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.monday= data.data;
                 return {timetableProps};
             }))
-        FinkiTimetableService.fetchStudentTimetableForDay(studentIndex,2).then(data=>
+        GeneralFinkiTimetableApi.fetchStudentTimetableForDay(studentIndex,2).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.tuesday= data.data;
                 return {timetableProps};
             }))
-        FinkiTimetableService.fetchStudentTimetableForDay(studentIndex,3).then(data=>
+        GeneralFinkiTimetableApi.fetchStudentTimetableForDay(studentIndex,3).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.wednesday= data.data;
                 return {timetableProps};
             }))
-        FinkiTimetableService.fetchStudentTimetableForDay(studentIndex,4).then(data=>
+        GeneralFinkiTimetableApi.fetchStudentTimetableForDay(studentIndex,4).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.thursday= data.data;
                 return {timetableProps};
             }))
-        FinkiTimetableService.fetchStudentTimetableForDay(studentIndex,5).then(data=>
+        GeneralFinkiTimetableApi.fetchStudentTimetableForDay(studentIndex,5).then(data=>
             this.setState((prevState)=>{
                 let timetableProps={...prevState.timetableProps};
                 timetableProps.events.friday= data.data;
@@ -128,7 +128,7 @@ class App extends Component {
         if (studentIndex == null) {
             this.setState({timetablePresent: false})
         } else {
-            FinkiTimetableService.checkIfStudentHasSubjectsInCurrentSemester(studentIndex).then((response) => {
+            GeneralFinkiTimetableApi.checkIfStudentHasSubjectsInCurrentSemester(studentIndex).then((response) => {
                 console.log(response.data)
                 this.setState(
                     {timetablePresent: response.data}

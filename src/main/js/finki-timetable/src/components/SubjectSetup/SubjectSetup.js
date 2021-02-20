@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
+import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 import {Button, Col, Form, FormLabel, Row} from "react-bootstrap";
 import Section from "../Section/Section";
 import Table from "react-bootstrap/Table";
@@ -33,13 +33,13 @@ class SubjectSetup extends Component {
     }
 
     componentDidMount() {
-        FinkiTimetableService.fetchAllSubjects().then((data) => {
+        GeneralFinkiTimetableApi.fetchAllSubjects().then((data) => {
             let subjectsFromApi = data.data.map(subject => {
                 return {value: subject.id, label: subject.name}
             });
             this.setState({subjects: subjectsFromApi})
         });
-        FinkiTimetableService.fetchAllProfessors().then((data) => {
+        GeneralFinkiTimetableApi.fetchAllProfessors().then((data) => {
             let professorsFromApi=data.data.map(professor=>{
                 return { value:professor.id, label: professor.name }
             });
@@ -47,7 +47,7 @@ class SubjectSetup extends Component {
                 professors: professorsFromApi, assistants: [{value: "", label: "Нема асистент по предметот"}].concat(professorsFromApi)
             });
         });
-        FinkiTimetableService.fetchAllStudentGroups().then((data) => {
+        GeneralFinkiTimetableApi.fetchAllStudentGroups().then((data) => {
             let studentGroupsFromApi  = data.data.map(studentGroup => {
                 return {value: studentGroup, label:studentGroup}
             });
@@ -74,10 +74,10 @@ class SubjectSetup extends Component {
     //check for duplicates
     addSubjectSelection(e) {
         if (this.state.selectedProfessor !== '' && this.state.selectedSubject !== '' && this.state.selectedStudentGroup !== '') {
-            FinkiTimetableService.validateSubjectSelection(this.state.selectedProfessor.value, this.state.selectedSubject.value, this.state.selectedStudentGroup.value).then(response => {
+            GeneralFinkiTimetableApi.validateSubjectSelection(this.state.selectedProfessor.value, this.state.selectedSubject.value, this.state.selectedStudentGroup.value).then(response => {
                 if (response.data) {
                     if (this.state.selectedAssistant !== "" && this.state.selectedAssistant.value !== '') {
-                        FinkiTimetableService.validateSubjectSelection(this.state.selectedAssistant.value, this.state.selectedSubject.value, this.state.selectedStudentGroup.value).then(response => {
+                        GeneralFinkiTimetableApi.validateSubjectSelection(this.state.selectedAssistant.value, this.state.selectedSubject.value, this.state.selectedStudentGroup.value).then(response => {
                             if (response.data) {
                                 if (this.state.subjectSelections.some(selection => selection.subjectId === this.state.selectedSubject.value && selection.professorId === this.state.selectedProfessor.value && selection.assistantId === this.state.selectedAssistant.value && selection.group === this.state.selectedStudentGroup.value) === false){
                                     this.setState((prevState) => ({
@@ -120,7 +120,7 @@ class SubjectSetup extends Component {
 
     //TODO add alert
     createTimetableFromSelection(e) {
-        FinkiTimetableService.createStudentTimetable(this.props.studentindex, this.state.subjectSelections).catch((error) => {
+        GeneralFinkiTimetableApi.createStudentTimetable(this.props.studentindex, this.state.subjectSelections).catch((error) => {
             console.log(error.response)
         })
         return <Redirect to='/'/>;

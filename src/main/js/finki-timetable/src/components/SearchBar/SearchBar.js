@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Row, Form, Col, Dropdown} from "react-bootstrap";
-import FinkiTimetableService from "../../repository/axiosFinkiTimetableRepository";
+import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 import Button from "react-bootstrap/Button";
 import SearchInput from "../SearchInput/SearchInput";
 
@@ -23,7 +23,7 @@ class SearchBar extends Component{
     }
 
     componentDidMount() {
-        FinkiTimetableService.fetchAllProfessors().then(data => {
+        GeneralFinkiTimetableApi.fetchAllProfessors().then(data => {
             let professorsFromApi=data.data.map(professor=>{
                 return { value:professor.id, label: professor.name }
             });
@@ -31,7 +31,7 @@ class SearchBar extends Component{
                professors: professorsFromApi
             })
         })
-        FinkiTimetableService.fetchAllRooms().then(data => {
+        GeneralFinkiTimetableApi.fetchAllRooms().then(data => {
             let roomsFromApi=data.data.map(room=>{
                 return { value: room, label: room }
             });
@@ -39,7 +39,7 @@ class SearchBar extends Component{
                 rooms: roomsFromApi
             })
         })
-        FinkiTimetableService.fetchAllStudentGroups().then(data => {
+        GeneralFinkiTimetableApi.fetchAllStudentGroups().then(data => {
             let studentGroupsFromApi = data.data.map(studentGroup => {
                 return {value: studentGroup, label: studentGroup}
             });

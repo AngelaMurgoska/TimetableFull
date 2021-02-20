@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {Image, Nav, NavbarBrand} from "react-bootstrap";
 import logo from "../../logo.png";
 import {Link, Redirect} from "react-router-dom";
-import axiosFinkiTimetableRepository from "../../repository/axiosFinkiTimetableRepository";
+import axiosFinkiTimetableRepository from "../../api/generalFinkiTimetableApi";
 import { withRouter } from 'react-router-dom';
+import AuthFinkiTimetableApi from "../../api/authFinkiTimetableApi";
 
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {username: '', password: '', isAuthenticated: false, open: false};
+        this.state = {email: '', password: '', studentIndex: '', isAuthenticated: false, open: false};
     }
 
     handleChange = (event) => {
@@ -16,28 +17,32 @@ class Login extends Component {
     }
 
     login = () => {
-        const user = {userName: this.state.username, password: this.state.password};
-        fetch("http://localhost:8080/" + 'login', {
-            method: 'POST',
-            body: JSON.stringify(user)
-        })
+        const user = {userName: this.state.email, password: this.state.password};
+        AuthFinkiTimetableApi.loginUser(user)
             .then(res => {
-                const jwtToken = res.headers.get('Authorization');
+                const jwtToken = res.headers.authorization;
                 if (jwtToken !== null) {
                     sessionStorage.setItem("jwt", jwtToken);
-                    sessionStorage.setItem("username",this.state.username);
-                     axiosFinkiTimetableRepository.fetchLoggedInUserRole(this.state.username).then(data=>{
-                        sessionStorage.setItem("role", data.data.name);
-                        this.setState({role: data.data.name});
-                        this.setState({isAuthenticated: true})
-                    });
+                    AuthFinkiTimetableApi.fetchLoggedInUserInfo(this.state.email).then(response => {
+                        this.setState({studentIndex: response.data.studentindex})
+                        sessionStorage.setItem("username",this.state.studentIndex);
+                        AuthFinkiTimetableApi.fetchLoggedInUserRole(this.state.email).then(data=>{
+                            sessionStorage.setItem("role", data.data.name);
+                            this.setState({role: data.data.name});
+                            this.setState({isAuthenticated: true})
+                        }).catch((error) => {
+                            console.log("User role error" + error.response)
+                        });
+                    }).catch((error) => {
+                        console.log("Login info error" + error.response)
+                    })
+
                 }
                 else {
-                    alert('Неуспешна најава');
+                    console.log("neuspesno")
                     this.setState({open: true});
                 }
-            })
-            .catch(err => console.error(err))
+            }).catch(err => console.log(err.response.data.message))
     };
 
     render() {
@@ -59,19 +64,23 @@ class Login extends Component {
                                 <div id="login-column" className="col-md-6">
                                     <div id="login-box" className="col-md-12">
                                         <div className="form-group">
-                                            <label htmlFor={"username"}>Корисничко име</label>
-                                            <input id="username" type="text" name="username"
+                                            <input id="email" type="text" name="email"
                                                    onChange={this.handleChange} className="form-control"
-                                                   placeholder="username"/>
+                                                   placeholder="Email"/>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor={"password"}>Лозинка</label>
                                             <input id="password" type="password" name="password"
                                                    onChange={this.handleChange} className="form-control"
-                                                   placeholder="password"/>
+                                                   placeholder="Password"/>
                                         </div>
+                                        <div className={"text-center"}>
                                         <input type="submit" name="submit" onClick={this.login}
-                                               className="btn btn-info btn-md" value="Login"/>
+                                               className="btn btn-info mt-3 mb-4 btn-block" value="Најава"/>
+                                               <hr/>
+                                            <Link to="/register">
+                                                <input type="submit" className="btn btn-success mt-3 mb-4 w-75" value="Регистрирај нов профил"/>
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

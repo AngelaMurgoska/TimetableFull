@@ -32,7 +32,7 @@ public class StudentTimetableServiceImpl implements StudentTimetableService {
             for (Timetable timetable : timetables) {
                 String hourFrom = timetable.getHourFromInDoubleDigitFormatWithMinutes();
                 String hourTo = timetable.getHourToInDoubleDigitFormatWithMinutes();
-                StudentTimetable studentTimetable = new StudentTimetable(student.getName(), student.getSurname(), student.getStudentindex(), student.getModule(), s.getSubject().getName(), timetable.getProfessor().getName(),
+                StudentTimetable studentTimetable = new StudentTimetable(student.getName(), student.getSurname(), student.getStudentindex(), s.getSubject().getName(), timetable.getProfessor().getName(),
                         s.getStudentGroupTimetable(), timetable.getRoom(), hourFrom, hourTo, timetable.getDay());
                 if (!studentTimetableList.contains(studentTimetable)) {
                     studentTimetableList.add(studentTimetable);

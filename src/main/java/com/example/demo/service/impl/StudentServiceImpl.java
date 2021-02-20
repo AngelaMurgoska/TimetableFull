@@ -54,4 +54,9 @@ public class StudentServiceImpl implements StudentService {
         calendarEventRepository.saveAll(eventsForSaving);
     }
 
+    @Override
+    public void saveStudent(Student student) {
+         studentRepository.save(student);
+    }
+
 }
