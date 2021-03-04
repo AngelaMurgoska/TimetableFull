@@ -25,12 +25,12 @@ public class SemesterServiceImpl implements SemesterService{
     }
 
     @Override
-    public Optional<Semester> findById(Long id) {
+    public Optional<Semester> getSemesterById(Long id) {
         return repo.findById(id);
     }
 
     @Override
-    public Semester save(Semester s) {
+    public Semester saveSemester(Semester s) {
         return repo.save(s);
     }
 
@@ -47,7 +47,7 @@ public class SemesterServiceImpl implements SemesterService{
     @Override
     public void createNewSemester(Long semesterType, String academicYear, LocalDate startDate, LocalDate endDate) {
         Semester newSemester=new Semester(semesterType,academicYear, startDate, endDate);
-        save(newSemester);
+        saveSemester(newSemester);
         Long currentLatestSemester=getMaxOverallSemesterNo();
         currentLatestSemester = currentLatestSemester != null ? currentLatestSemester : 0L;
         newSemester.setOverallSemesterNo(currentLatestSemester+1);

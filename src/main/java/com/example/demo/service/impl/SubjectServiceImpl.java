@@ -23,12 +23,12 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Optional<Subject> getById(Long id) {
+    public Optional<Subject> getSubjectById(Long id) {
         return repo.findById(id);
     }
 
     @Override
-    public Subject getByName(String name) {
+    public Subject getSubjectByName(String name) {
         return  repo.findByName(name);
     }
 

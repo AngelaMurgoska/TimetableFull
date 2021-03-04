@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Col, Form, Row} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
 
 const StudentRegister = (props) => {
     const [email, setEmail] = useState('')
@@ -47,23 +47,21 @@ const StudentRegister = (props) => {
                     <Form.Control placeholder="Last name" onChange={handleSurnameChange}/>
                 </Col>
             </Row>
-            <div className="form-group">
-                <input type="text" name="index"  onChange={handleStudentIndexChange}
-                       className="form-control"
+            <Form.Group>
+                <Form.Control type="text" name="index"  onChange={handleStudentIndexChange}
                        placeholder="Student Index"/>
-            </div>
-            <div className="form-group">
-                <input id="email" type="text" name="email"  onChange={handleEmailChange}
-                       className="form-control"
+            </Form.Group>
+            <Form.Group>
+                <Form.Control type="email" name="email"  onChange={handleEmailChange}
                        placeholder="Email"/>
-            </div>
-            <div className="form-group">
-                <input id="password" type="password" name="password"  onChange={handlePasswordChange}
-                       className="form-control" placeholder="Password"/>
-            </div>
+            </Form.Group>
+            <Form.Group>
+                <Form.Control type="password" name="password"  onChange={handlePasswordChange}
+                       placeholder="Password"/>
+            </Form.Group>
             <div className={"text-center"}>
-                <input type="submit" name="submit" onClick={prepareStudentUser}
-                       className="btn btn-success mt-3 mb-4 btn-block" value="Регистрација"/>
+                <Button variant="success" type="submit" name="submit" onClick={prepareStudentUser}
+                        className="mt-3 mb-4 btn-block">Регистрација</Button>
             </div>
             </div>
         </React.Fragment>

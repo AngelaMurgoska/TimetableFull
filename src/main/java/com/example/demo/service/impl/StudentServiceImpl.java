@@ -25,12 +25,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getByStuIndex(Long index) {
+    public Student getStudentByStudentindex(Long index) {
         return studentRepository.findByStudentindex(index);
     }
 
     @Override
-    public Student getByStuEmail(String email) {
+    public Student getStudentByEmail(String email) {
         return studentRepository.findByEmail(email);
     }
 

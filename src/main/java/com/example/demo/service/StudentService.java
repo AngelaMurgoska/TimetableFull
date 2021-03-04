@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface StudentService {
 
-    Student getByStuIndex(Long index);
+    Student getStudentByStudentindex(Long index);
 
-    Student getByStuEmail(String email);
+    Student getStudentByEmail(String email);
 
     //TODO is it needed?
     List<CalendarEvent> getAllCalendarEventsFromStudent(Student student);

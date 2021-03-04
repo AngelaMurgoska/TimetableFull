@@ -34,7 +34,7 @@ class StudentInfo extends Component{
     render() {
         return(
             <div className={"mb-3"}>
-                <Row>
+                <Row className={"align-items-center"}>
                     <Col>
                         <h4>Распоред на часови за студентот:</h4>
                         <div>{this.state.student.name} {this.state.student.surname} {this.state.student.studentindex}</div>

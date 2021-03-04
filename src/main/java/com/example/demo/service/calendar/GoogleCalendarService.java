@@ -6,7 +6,6 @@ import com.example.demo.models.Student;
 import com.example.demo.models.nonEntity.timetables.StudentTimetable;
 import com.example.demo.service.SemesterService;
 import com.example.demo.service.StudentService;
-import com.example.demo.service.impl.StudentServiceImpl;
 import com.example.demo.utils.DateManipulator;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -103,7 +102,7 @@ public class GoogleCalendarService {
         Semester currentSemester = semesterService.getLatestSemester();
 
         Long studentIndex = studentTimetables.get(0).getStudentindex();
-        Student currentStudent = studentService.getByStuIndex(studentIndex);
+        Student currentStudent = studentService.getStudentByStudentindex(studentIndex);
 
         List<CalendarEvent> currentEventsInStudentCalendar = studentService.getAllCalendarEventsFromStudent(currentStudent);
         removeEventsFromGoogleCalendar(currentEventsInStudentCalendar);

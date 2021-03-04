@@ -21,12 +21,12 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
-    public List<Timetable> getByProfessorId(Long profId) {
+    public List<Timetable> getTimetableByProfessorId(Long profId) {
         return repo.findByProfessorId(profId);
     }
 
     @Override
-    public List<Timetable> getBySubjectId(Long subjId) {
+    public List<Timetable> getTimetableBySubjectId(Long subjId) {
         return repo.findBySubjectId(subjId);
     }
 
@@ -59,17 +59,17 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
-    public List<Timetable> getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId, Long subjId, Long semId, String studentgroup, Long version) {
+    public List<Timetable> getTimetableByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId, Long subjId, Long semId, String studentgroup, Long version) {
         return repo.findByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(profId, subjId, semId, studentgroup, version);
     }
 
     @Override
-    public List<Timetable> getByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(Long professorId, String room, String studentGroup, Long semesterId, Long version) {
+    public List<Timetable> getTimetableByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(Long professorId, String room, String studentGroup, Long semesterId, Long version) {
         return repo.findByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(professorId, room, studentGroup, semesterId, version);
     }
 
     @Override
-    public List<Timetable> getBySubjectIdAndSemesterIdAndStudentgroupAndVersion(Long subjId, Long sessId,String studentgroup,Long version) {
+    public List<Timetable> getTimetableBySubjectIdAndSemesterIdAndStudentgroupAndVersion(Long subjId, Long sessId, String studentgroup, Long version) {
         return repo.findBySubjectIdAndSemesterIdAndStudentgroupAndVersion(subjId,sessId,studentgroup,version);
     }
 

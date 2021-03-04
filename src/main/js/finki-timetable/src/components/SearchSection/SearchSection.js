@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Row, Form, Col, Dropdown} from "react-bootstrap";
 import GeneralFinkiTimetableApi from "../../api/generalFinkiTimetableApi";
 import Button from "react-bootstrap/Button";
-import SearchInput from "../SearchInput/SearchInput";
+import SearchInput from "../SearchField/SearchField";
 
-class SearchBar extends Component{
+class SearchSection extends Component{
 
     constructor(props,context) {
         super(props, context);
@@ -67,9 +67,9 @@ class SearchBar extends Component{
 
     render() {
         return (
-            <div className={"mb-3"}>
+            <div className={"mb-4"}>
                 <h4 className={"mb-3 "}>Опции за филтрирање</h4>
-                <Form  onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit}>
                     <Row className={"align-items-center"}>
                         <Col>
                             <SearchInput isClearable = {true} onChangeMethod = {this.handleProfessorChange} searchPlaceholder = "Изберете професор" searchData = {this.state.professors}/>
@@ -91,4 +91,4 @@ class SearchBar extends Component{
 
 }
 
-export default SearchBar;
+export default SearchSection;

@@ -4,7 +4,7 @@ import {Button, Col, Form, FormLabel, Row} from "react-bootstrap";
 import Section from "../Section/Section";
 import Table from "react-bootstrap/Table";
 import {Redirect} from "react-router-dom";
-import SearchInput from "../SearchInput/SearchInput";
+import SearchInput from "../SearchField/SearchField";
 
 class SubjectSetup extends Component {
 
@@ -120,8 +120,11 @@ class SubjectSetup extends Component {
 
     //TODO add alert
     createTimetableFromSelection(e) {
-        GeneralFinkiTimetableApi.createStudentTimetable(this.props.studentindex, this.state.subjectSelections).catch((error) => {
-            console.log(error.response)
+        GeneralFinkiTimetableApi.createStudentTimetable(this.props.studentindex, this.state.subjectSelections).then((response) => {
+            alert("Успешно внесување на предмети")
+        }).catch((error) => {
+            alert("Настана грешка, обидете се повторно")
+            console.log(error.response.data)
         })
         return <Redirect to='/'/>;
     }
@@ -149,7 +152,7 @@ class SubjectSetup extends Component {
                      <SearchInput searchPlaceholder = {"Изберете група"} isClearable = {false} onChangeMethod = {this.handleGroupChange} searchData = {this.state.studentGroups}/>
                  </Col>
                  <Col>
-                     <Button onClick={this.addSubjectSelection} variant="success">Додај</Button>
+                     <Button className={"w-50"} onClick={this.addSubjectSelection} variant="primary">Додај</Button>
                  </Col>
              </Row>
              {this.state.selectionInvalid && <div className={"mt-2 text-danger"}>Не постои податок во распоредот за ваква селекција.</div>}
@@ -157,7 +160,7 @@ class SubjectSetup extends Component {
          {this.state.subjectSelections.length > 0 &&
          <div className={"mt-4"}>
              <Section>
-                 <h4>Избрани предмети</h4>
+                 <h5>Избрани предмети</h5>
                  <Table className={"mr-5"}>
                      <thead>
                      <tr>
@@ -190,7 +193,7 @@ class SubjectSetup extends Component {
                  )}
                  </tbody>
                 </Table>
-                <Button onClick={this.createTimetableFromSelection} className={"float-right mt-2"} variant={"success"}>Додај предмети во распоред</Button>
+                <Button onClick={this.createTimetableFromSelection} className={"float-right my-2"} variant={"primary"}>Додај предмети во распоред</Button>
              </Section>
          </div> }
          </React.Fragment>

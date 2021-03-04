@@ -2,8 +2,8 @@ package com.example.demo.service.auth;
 
 import com.example.demo.models.Role;
 import com.example.demo.models.User;
-import com.example.demo.models.exceptions.ExistingUserException;
-import com.example.demo.models.exceptions.NonExistentRoleException;
+import com.example.demo.exception.models.ExistingUserException;
+import com.example.demo.exception.models.NonExistentRoleException;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserRoleService {
+public class UserAndRoleService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
 
-    public UserRoleService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserAndRoleService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }

@@ -7,7 +7,6 @@ import com.example.demo.service.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentSubjectsServiceImpl implements StudentSubjectsService {
@@ -46,7 +45,7 @@ public class StudentSubjectsServiceImpl implements StudentSubjectsService {
     //TODO validation
     @Override
     public void saveStudentSubjects(List<StudentSubjectSelection> subjectSelections, Long studentindex) {
-        Student student = studentService.getByStuIndex(studentindex);
+        Student student = studentService.getStudentByStudentindex(studentindex);
         Semester latestSemester = semesterService.getLatestSemester();
         Long latestTimetableVersionInCurrentSemester = timetableService.getLatestTimetableVersionInSemester(latestSemester.getId());
         for (StudentSubjectSelection singleSelection : subjectSelections) {
@@ -60,10 +59,10 @@ public class StudentSubjectsServiceImpl implements StudentSubjectsService {
     }
 
     private void saveStudentSubject(Long professorId, Long subjectId, String studentGroup, Student student, Semester latestSemester, Long latestTimetableVersionInCurrentSemester) {
-        if (timetableService.getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(professorId,subjectId,latestSemester.getId(), studentGroup, latestTimetableVersionInCurrentSemester) != null) {
+        if (timetableService.getTimetableByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(professorId,subjectId,latestSemester.getId(), studentGroup, latestTimetableVersionInCurrentSemester) != null) {
             StudentSubjects studentSubject = new StudentSubjects();
             Professor professor = professorService.getProfessorById(professorId).get();
-            Subject subject = subjectService.getById(subjectId).get();
+            Subject subject = subjectService.getSubjectById(subjectId).get();
             studentSubject.setStudent(student);
             studentSubject.setProfessor(professor);
             studentSubject.setSubject(subject);

@@ -10,9 +10,9 @@ public interface SemesterService {
 
     List<Semester> getAllSemesters();
 
-    Optional<Semester> findById(Long id);
+    Optional<Semester> getSemesterById(Long id);
 
-    Semester save(Semester s);
+    Semester saveSemester(Semester s);
 
     Semester getLatestSemester();
 

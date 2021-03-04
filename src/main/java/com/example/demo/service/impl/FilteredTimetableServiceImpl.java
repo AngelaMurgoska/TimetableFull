@@ -20,14 +20,14 @@ public class FilteredTimetableServiceImpl implements FilteredTimetableService {
     }
 
     @Override
-    public List<FilteredTimetable> getFilteredTimetableWithParameters(Semester semester, String professorId, String room, String studentGroup) {
+    public List<FilteredTimetable> getFilteredTimetableListWithParameters(Semester semester, String professorId, String room, String studentGroup) {
         Long lastTimetableVersion=timetableService.getLatestTimetableVersionInSemester(semester.getId());
         Long professorIdLong = professorId != null ? Long.parseLong(professorId) : null;
-        List<Timetable> timetableList = timetableService.getByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(professorIdLong, room, studentGroup, semester.getId(), lastTimetableVersion);
-        return getFilteredTimetable(timetableList);
+        List<Timetable> timetableList = timetableService.getTimetableByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(professorIdLong, room, studentGroup, semester.getId(), lastTimetableVersion);
+        return getFilteredTimetableListFromTimetableList(timetableList);
     }
 
-    private List<FilteredTimetable> getFilteredTimetable(List<Timetable> timetableList){
+    private List<FilteredTimetable> getFilteredTimetableListFromTimetableList(List<Timetable> timetableList){
         List<FilteredTimetable> filteredTimetableList = new ArrayList<>();
         for(Timetable t  : timetableList){
             String hourFrom = t.getHourFromInDoubleDigitFormatWithMinutes();

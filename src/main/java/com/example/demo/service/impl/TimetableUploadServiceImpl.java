@@ -57,10 +57,10 @@ public class TimetableUploadServiceImpl implements TimetableUploadService {
                     professor = professorService.getProfessorByName(timetableUpload.getProfessor());
                 }
 
-                Subject subject = subjectService.getByName(timetableUpload.getSubject());
+                Subject subject = subjectService.getSubjectByName(timetableUpload.getSubject());
                 if (subject == null) {
                     subjectService.saveSubject(timetableUpload.getSubject());
-                    subject = subjectService.getByName(timetableUpload.getSubject());
+                    subject = subjectService.getSubjectByName(timetableUpload.getSubject());
                 }
 
                 Timetable newTimetable = new Timetable(8 + Long.parseLong(timetableUpload.getHourFrom()),

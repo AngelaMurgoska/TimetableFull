@@ -28,7 +28,7 @@ public class StudentTimetableServiceImpl implements StudentTimetableService {
         Long lastTimetableVersion=timetableService.getLatestTimetableVersionInSemester(semester.getId());
 
         for (StudentSubjects s : studentSubjects) {
-            List<Timetable> timetables = timetableService.getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(s.getProfessor().getId(),s.getSubject().getId(),semester.getId(),s.getStudentGroupTimetable(),lastTimetableVersion);
+            List<Timetable> timetables = timetableService.getTimetableByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(s.getProfessor().getId(),s.getSubject().getId(),semester.getId(),s.getStudentGroupTimetable(),lastTimetableVersion);
             for (Timetable timetable : timetables) {
                 String hourFrom = timetable.getHourFromInDoubleDigitFormatWithMinutes();
                 String hourTo = timetable.getHourToInDoubleDigitFormatWithMinutes();

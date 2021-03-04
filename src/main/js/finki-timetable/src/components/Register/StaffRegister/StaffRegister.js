@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {Button, Form} from "react-bootstrap";
 
 const StaffRegister = (props) => {
 
@@ -10,7 +11,6 @@ const StaffRegister = (props) => {
         email.target.value ? setEmail(email.target.value) : setEmail('')
     }
 
-    //TODO add another field to validate password if you have the time
     const handlePasswordChange = (password) => {
         password.target.value ? setPassword(password.target.value) : setPassword('')
     }
@@ -24,18 +24,17 @@ const StaffRegister = (props) => {
 
     return (
         <React.Fragment>
-        <div className="form-group">
-            <input id="email" type="text" name="email"  onChange={handleEmailChange}
-                   className="form-control"
+        <Form.Group>
+            <Form.Control type="email" name="email"  onChange={handleEmailChange}
                    placeholder="Email"/>
-        </div>
-        <div className="form-group">
-        <input id="password" type="password" name="password"  onChange={handlePasswordChange}
-                    className="form-control" placeholder="Password"/>
-        </div>
+        </Form.Group>
+        <Form.Group>
+        <Form.Control type="password" name="password"  onChange={handlePasswordChange}
+                    placeholder="Password"/>
+        </Form.Group>
             <div className={"text-center"}>
-                <input type="submit" name="submit" onClick={prepareStaffUser}
-                       className="btn btn-success mt-3 mb-4 btn-block" value="Регистрација"/>
+                <Button variant="success" type="submit" onClick={prepareStaffUser}
+                        className="mt-3 mb-4 btn-block">Регистрација</Button>
             </div>
         </React.Fragment>
     )

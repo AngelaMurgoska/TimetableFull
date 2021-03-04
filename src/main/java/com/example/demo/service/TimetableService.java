@@ -11,9 +11,9 @@ import java.util.OptionalLong;
 
 public interface TimetableService {
 
-    List<Timetable> getByProfessorId(Long profId);
+    List<Timetable> getTimetableByProfessorId(Long profId);
 
-    List<Timetable> getBySubjectId(Long subjId);
+    List<Timetable> getTimetableBySubjectId(Long subjId);
 
     List<String> getAllRooms();
 
@@ -21,11 +21,11 @@ public interface TimetableService {
 
     Long getLatestTimetableVersionInSemester(Long semId);
 
-    List<Timetable> getByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId,Long subjId,Long semId,String studentgroup,Long version);
+    List<Timetable> getTimetableByProfessorIdAndSubjectIdAndSemesterIdAndStudentgroupAndVersion(Long profId, Long subjId, Long semId, String studentgroup, Long version);
 
-    List<Timetable> getByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(Long professorId, String room, String studentGroup, Long semesterId, Long version);
+    List<Timetable> getTimetableByProfessorIdAndRoomAndStudentgroupAndSemesterIdAndVersion(Long professorId, String room, String studentGroup, Long semesterId, Long version);
 
-    List<Timetable> getBySubjectIdAndSemesterIdAndStudentgroupAndVersion(Long subjId, Long semId, String studentgroup, Long version);
+    List<Timetable> getTimetableBySubjectIdAndSemesterIdAndStudentgroupAndVersion(Long subjId, Long semId, String studentgroup, Long version);
 
     Collection<Timetable> saveAll(Collection<Timetable> exams);
 

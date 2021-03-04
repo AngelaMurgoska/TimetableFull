@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {Image, Nav, NavbarBrand} from "react-bootstrap";
-import logo from "../../logo.png";
+import {Button, Col, Form, Image, Nav, NavbarBrand, Row} from "react-bootstrap";
 import {Link, Redirect} from "react-router-dom";
-import axiosFinkiTimetableRepository from "../../api/generalFinkiTimetableApi";
-import { withRouter } from 'react-router-dom';
 import AuthFinkiTimetableApi from "../../api/authFinkiTimetableApi";
+import Menu from "../Menu/Menu";
 
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {email: '', password: '', studentIndex: '', isAuthenticated: false, open: false};
+        this.state = {email: '', password: '', studentIndex: '', isAuthenticated: false, open: false, loginError: false};
     }
 
     handleChange = (event) => {
@@ -39,10 +37,10 @@ class Login extends Component {
 
                 }
                 else {
-                    console.log("neuspesno")
                     this.setState({open: true});
+                    this.setState({loginError: true, loginUnsuccessfulMessage: "Неуспешна најава, проверете ги внесените податоци."})
                 }
-            }).catch(err => console.log(err.response.data.message))
+            }).catch(err => this.setState({loginError: true, loginUnsuccessfulMessage: "Неуспешна најава, проверете ги внесените податоци."}))
     };
 
     render() {
@@ -51,39 +49,33 @@ class Login extends Component {
         } else {
             return (
                 <React.Fragment>
-                    <Nav className={"navbar fixed-top navbar-light bg-light"}>
-                        <NavbarBrand>
-                            <Image src={logo} fluid/>
-                            <span><Link to={"/"} className={"text-decoration-none"}> Распоред на часови</Link></span>
-                        </NavbarBrand>
-                    </Nav>
-                    <div id="login">
+                    <Menu/>
+                    <div>
                         <h4 className="text-center pt-5">Најава</h4>
                         <div className="container mt-4">
-                            <div id="login-row" className="row justify-content-center align-items-center">
-                                <div id="login-column" className="col-md-6">
-                                    <div id="login-box" className="col-md-12">
-                                        <div className="form-group">
-                                            <input id="email" type="text" name="email"
-                                                   onChange={this.handleChange} className="form-control"
-                                                   placeholder="Email"/>
-                                        </div>
-                                        <div className="form-group">
-                                            <input id="password" type="password" name="password"
-                                                   onChange={this.handleChange} className="form-control"
-                                                   placeholder="Password"/>
-                                        </div>
+                            <Row className="justify-content-center align-items-center">
+                                <Col md={6}>
+                                    <Col md={12}>
+                                        {this.state.loginError && <Form.Group className={"text-danger"}>{this.state.loginUnsuccessfulMessage}</Form.Group>}
+                                        <Form.Group>
+                                            <Form.Control id="email" type="email" name="email"
+                                                   onChange={this.handleChange} placeholder="Email"/>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Control id="password" type="password" name="password"
+                                                   onChange={this.handleChange} placeholder="Password"/>
+                                        </Form.Group>
                                         <div className={"text-center"}>
-                                        <input type="submit" name="submit" onClick={this.login}
-                                               className="btn btn-info mt-3 mb-4 btn-block" value="Најава"/>
+                                        <Button variant="info" type="submit" onClick={this.login}
+                                                className="mt-3 mb-4 btn-block">Најава</Button>
                                                <hr/>
                                             <Link to="/register">
-                                                <input type="submit" className="btn btn-success mt-3 mb-4 w-75" value="Регистрирај нов профил"/>
+                                                <Button variant="success" type="submit" className="mt-3 mb-4 w-75">Регистрирај нов профил</Button>
                                             </Link>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    </Col>
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                 </React.Fragment>

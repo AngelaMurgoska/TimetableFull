@@ -1,18 +1,19 @@
 import React, {Component, useState} from 'react'
-import {Image, Nav, NavbarBrand} from "react-bootstrap";
-import logo from "../../logo.png";
-import {Link} from "react-router-dom";
-import SearchInput from "../SearchInput/SearchInput";
+import {Col, Form, Image, Nav, NavbarBrand, Row} from "react-bootstrap";
+import SearchInput from "../SearchField/SearchField";
 import StudentRegister from "./StudentRegister/StudentRegister";
 import StaffRegister from "./StaffRegister/StaffRegister";
 import AuthFinkiTimetableApi from "../../api/authFinkiTimetableApi";
-import SuccessfulRegistration from "./SuccessfulRegistration/SuccessfulRegistration";
+import RegistrationMessage from "./SuccessfulRegistration/RegistrationMessage";
+import Menu from "../Menu/Menu";
 
 const Register = () => {
 
     const roles = [{value: 1, label: "Студент"}, {value: 2, label: "Техничко лице"}]
     const [chosenRole, setChosenRole] = useState('')
-    const [registrationSuccess, setRegistrationSuccess] = useState(false)
+    const [successfulRegistration, setSuccessfulRegistration] = useState(false)
+    const [registerError, setRegisterError] = useState(false)
+    const [registerUnsuccessfulMessage, setRegisterUnsuccessfulMessage] = useState("")
 
     const handleUserChange = (user) => {
         user ? setChosenRole(user.value) : setChosenRole('')
@@ -22,9 +23,10 @@ const Register = () => {
         if (staffUserData) {
             staffUserData.userRole = {id: chosenRole}
             AuthFinkiTimetableApi.registerStaffUser(staffUserData).then((response) => {
-                setRegistrationSuccess(true)
+                setSuccessfulRegistration(true)
             }).catch((error) => {
-                console.log(error.message)
+                setRegisterError(true)
+                setRegisterUnsuccessfulMessage(error.response.data)
             })
         }
     }
@@ -32,42 +34,40 @@ const Register = () => {
     const createStudentUser = (studentUserData) => {
         if (studentUserData) {
             AuthFinkiTimetableApi.registerStudentUser(studentUserData).then((response) => {
-                setRegistrationSuccess(true)
+                setSuccessfulRegistration(true)
             }).catch((error) => {
-                console.log(error.message)
+                setRegisterError(true)
+                setRegisterUnsuccessfulMessage(error.response.data)
             })
         }
     }
 
     return (<React.Fragment>
-        <Nav className={"navbar fixed-top navbar-light bg-light"}>
-            <NavbarBrand>
-                <Image src={logo} fluid/>
-                <span><Link to={"/"} className={"text-decoration-none"}> Распоред на часови</Link></span>
-            </NavbarBrand>
-        </Nav>
-        <div id="login">
+        <Menu/>
+        <div>
             <h4 className="text-center pt-5">Регистрација</h4>
             <div className="container mt-4">
-                <div id="login-row" className="row justify-content-center align-items-center">
-                    <div id="login-column" className="col-md-6">
-                        <div id="login-box" className="col-md-12">
-                            <div className="form-group">
+                <Row className="justify-content-center align-items-center">
+                    <Col md={6}>
+                        <Col md={12}>
+                            {registerError && <Form.Group className={"text-danger"}>{registerUnsuccessfulMessage}</Form.Group>}
+                            <Form.Group>
                                 <SearchInput isClearable={false} onChangeMethod={handleUserChange} searchPlaceholder={"Тип на профил"} searchData={roles}/>
-                            </div>
+                            </Form.Group>
                             {chosenRole === 1 && <StudentRegister createStudentUser = {createStudentUser}/>}
                             {chosenRole === 2 && <StaffRegister createStaffUser = {createStaffUser}/>}
-                        </div>
-                    </div>
-                </div>
-                <div className={"row justify-content-center align-items-center"}>
-                    <div className={"col-md-6"}>
+                        </Col>
+                    </Col>
+                </Row>
+                <Row className={"justify-content-center align-items-center"}>
+                    <Col md={6} className={"text-center"}>
+                        <small><RegistrationMessage message = {"Веќе имаш профил? "} type = {"link"}/></small>
                         <hr/>
-                    </div>
-                </div>
-                <div className = {"row justify-content-center align-items-center"}>
-                    { registrationSuccess && <SuccessfulRegistration/>}
-                </div>
+                    </Col>
+                </Row>
+                <Row className = {"justify-content-center align-items-center"}>
+                    {successfulRegistration && <RegistrationMessage message = {"Успешна регистрација! "} type = {"button"}/>}
+                </Row>
             </div>
         </div>
     </React.Fragment>)

@@ -9,9 +9,9 @@ public interface SubjectService {
 
     List<Subject> getAllSubjects();
 
-    Optional<Subject> getById(Long id);
+    Optional<Subject> getSubjectById(Long id);
 
-    Subject getByName(String name);
+    Subject getSubjectByName(String name);
 
     void saveSubject(String subjectName);
 }

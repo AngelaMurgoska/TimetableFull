@@ -4,7 +4,7 @@ const GeneralFinkiTimetableApi = {
 
     validateSubjectSelection:(professorId, subjectId, studentGroup) => {
         const jwtToken = sessionStorage.getItem("jwt");
-        const url = `http://localhost:8080/timetable/check-subject-selection`;
+        const url = `http://localhost:8080/timetable/validate-subject-selection`;
         const config = {
             headers: {
                 "Authorization": jwtToken

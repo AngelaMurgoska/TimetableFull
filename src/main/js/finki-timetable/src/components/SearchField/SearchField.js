@@ -41,6 +41,7 @@ export default class SingleSelect extends Component<*, State> {
                 name="color"
                 placeholder = {this.props.searchPlaceholder}
                 options = {this.props.searchData}
+                defaultValue = {this.props.defaultValue}
                 />
             </Fragment>
         )

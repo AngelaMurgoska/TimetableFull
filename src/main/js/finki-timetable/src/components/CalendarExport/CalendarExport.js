@@ -1,6 +1,5 @@
 import React from 'react';
 import {Button} from "react-bootstrap";
-import Col from "react-bootstrap/Col";
 
 const CalendarExport = (props) => {
     return (

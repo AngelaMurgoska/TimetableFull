@@ -1,5 +1,4 @@
 import axios,{ post } from 'axios';
-import GeneralFinkiTimetableApi from "./generalFinkiTimetableApi";
 
 const AuthFinkiTimetableApi = {
     loginUser: (user) => {
