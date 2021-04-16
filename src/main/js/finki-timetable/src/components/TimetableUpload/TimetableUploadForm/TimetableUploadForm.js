@@ -48,6 +48,7 @@ class TimetableUploadForm extends Component{
         }
 
         GeneralFinkiTimetableApi.uploadFile(this.state.file, type, academicYear, startDate, endDate).then((response) => {
+            alert("Распоредот е успешно прикачен")
         }).catch((error) => {
             this.props.handleFileUploadError(error.response.data)
         });

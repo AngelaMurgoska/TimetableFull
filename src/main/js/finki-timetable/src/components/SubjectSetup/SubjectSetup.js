@@ -124,7 +124,6 @@ class SubjectSetup extends Component {
             alert("Успешно внесување на предмети")
         }).catch((error) => {
             alert("Настана грешка, обидете се повторно")
-            console.log(error.response.data)
         })
         return <Redirect to='/'/>;
     }

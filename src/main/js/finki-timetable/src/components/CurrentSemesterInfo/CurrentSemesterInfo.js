@@ -7,12 +7,13 @@ const CurrentSemesterInfo = (props) => {
 
     useEffect(() => {
         GeneralFinkiTimetableApi.fetchLatestSemester().then((latestSemester) => {
+            console.log(latestSemester.data)
             setCurrentSemester(latestSemester.data);
         })
     }, []);
 
     return (
-        <div>{currentSemester.type === "0" ? 'Летен' : 'Зимски'} семестар {currentSemester.academicYear} година</div>
+        <div>{currentSemester.semesterType == 0 ? 'Летен' : 'Зимски'} семестар {currentSemester.academicYear} година</div>
     )
 }
 

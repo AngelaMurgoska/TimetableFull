@@ -21,7 +21,6 @@ const TimetableUpload = () => {
 
     const handleFileUploadError = (errorMessage) => {
         setFileUploadError(true)
-        console.log(errorMessage)
         setFileUploadUnsuccessfulMessage(errorMessage)
     }
         return(

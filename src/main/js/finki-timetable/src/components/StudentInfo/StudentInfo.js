@@ -25,9 +25,9 @@ class StudentInfo extends Component{
     addTimetableToGoogleCalendar(e){
         e.preventDefault();
         GeneralFinkiTimetableApi.addTimetableToGoogleCalendar(this.state.student.studentindex).then((response) => {
-            alert("Timetable successfully added to calendar");
+            alert("Распоредот е успешно додаден во календар");
         }).catch((response) => {
-            alert("Something went wrong")
+            alert("Настана грешка")
         } )
     }
 

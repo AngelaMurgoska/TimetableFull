@@ -52,7 +52,6 @@ class StudentTimetable extends Component {
             this.setState({timetablePresent: false})
         } else {
             GeneralFinkiTimetableApi.checkIfStudentHasSubjectsInCurrentSemester(studentindex).then((response) => {
-                console.log(response.data)
                 this.setState(
                     {timetablePresent: response.data}
                 )
